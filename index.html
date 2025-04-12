@@ -320,5 +320,137 @@
 
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        // 註冊 Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker 註冊成功: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker 註冊失敗: ', error);
+                    });
+            });
+        }
+
+        // 通知功能
+        const enableNotificationsButton = document.getElementById('enable-notifications');
+        const notificationStatus = document.getElementById('notification-status');
+
+        // 檢查是否支援通知功能
+        if (!('Notification' in window)) {
+            notificationStatus.textContent = '您的瀏覽器不支援通知功能';
+            enableNotificationsButton.disabled = true;
+        } else {
+            // 檢查當前通知許可狀態
+            checkNotificationPermission();
+        }
+
+        // 通知許可檢查
+        function checkNotificationPermission() {
+            if (Notification.permission === 'granted') {
+                notificationStatus.textContent = '通知已啟用';
+                enableNotificationsButton.textContent = '通知已啟用';
+                enableNotificationsButton.disabled = true;
+                scheduleExamReminders();
+            } else if (Notification.permission === 'denied') {
+                notificationStatus.textContent = '通知權限已被拒絕，請在瀏覽器設定中重新授權';
+                enableNotificationsButton.disabled = true;
+            } else {
+                enableNotificationsButton.addEventListener('click', requestNotificationPermission);
+            }
+        }
+
+        // 請求通知許可
+        function requestNotificationPermission() {
+            Notification.requestPermission()
+                .then(permission => {
+                    if (permission === 'granted') {
+                        notificationStatus.textContent = '通知已啟用';
+                        enableNotificationsButton.textContent = '通知已啟用';
+                        enableNotificationsButton.disabled = true;
+                        scheduleExamReminders();
+                        
+                        // 發送測試通知
+                        sendTestNotification();
+                    } else {
+                        notificationStatus.textContent = '您已拒絕通知權限';
+                    }
+                });
+        }
+
+        // 發送測試通知
+        function sendTestNotification() {
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.active.postMessage({
+                        type: 'schedule-notification',
+                        title: '通知已啟用',
+                        body: '您將在考試前收到提醒',
+                        icon: '/android-chrome-192x192.png',
+                        delay: 0 // 立即發送
+                    });
+                });
+            } else {
+                // 若Service Worker尚未就緒，直接使用Notification API
+                new Notification('通知已啟用', {
+                    body: '您將在考試前收到提醒',
+                    icon: '/android-chrome-192x192.png'
+                });
+            }
+        }
+
+        // 設定考試提醒
+        function scheduleExamReminders() {
+            // 假設考試日期是2024年7月20日
+            const examDate = new Date('2024-07-20T00:00:00');
+            const now = new Date();
+            
+            // 計算時間差（毫秒）
+            const timeToExam = examDate.getTime() - now.getTime();
+            
+            // 若Service Worker已就緒，安排提醒
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                navigator.serviceWorker.ready.then(registration => {
+                    // 一週前提醒
+                    if (timeToExam > 7 * 24 * 60 * 60 * 1000) {
+                        const weekBeforeDelay = timeToExam - (7 * 24 * 60 * 60 * 1000);
+                        registration.active.postMessage({
+                            type: 'schedule-notification',
+                            title: '考試倒數一週',
+                            body: '距離第114次專技人員高普考僅剩一週時間，請做好準備',
+                            icon: '/android-chrome-192x192.png',
+                            delay: weekBeforeDelay
+                        });
+                    }
+                    
+                    // 三日前提醒
+                    if (timeToExam > 3 * 24 * 60 * 60 * 1000) {
+                        const threeDaysBeforeDelay = timeToExam - (3 * 24 * 60 * 60 * 1000);
+                        registration.active.postMessage({
+                            type: 'schedule-notification',
+                            title: '考試倒數三天',
+                            body: '距離第114次專技人員高普考僅剩三天時間，加油！',
+                            icon: '/android-chrome-192x192.png',
+                            delay: threeDaysBeforeDelay
+                        });
+                    }
+                    
+                    // 一日前提醒
+                    if (timeToExam > 24 * 60 * 60 * 1000) {
+                        const oneDayBeforeDelay = timeToExam - (24 * 60 * 60 * 1000);
+                        registration.active.postMessage({
+                            type: 'schedule-notification',
+                            title: '考試倒數一天',
+                            body: '明天就是第114次專技人員高普考，請檢查應考證件與文具',
+                            icon: '/android-chrome-192x192.png',
+                            delay: oneDayBeforeDelay
+                        });
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
