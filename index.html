@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4361ee">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="114年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
+    <meta name="keywords" content="分科測驗,114年,倒數計時,大學入學,考試日程,備考,高中生,學測,指考">
+    <meta name="author" content="分科測驗倒數計時">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph 標籤 (用於社群媒體分享) -->
+    <meta property="og:title" content="114年分科測驗倒數計時">
+    <meta property="og:description" content="114年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://114分科測驗倒數.tw">
+    <meta property="og:image" content="https://114分科測驗倒數.tw/og-image.jpg">
+    <meta property="og:locale" content="zh_TW">
+    
+    <!-- Twitter Card 標籤 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="114年分科測驗倒數計時">
+    <meta name="twitter:description" content="114年分科測驗倒數計時器，準確掌握備考時間，加油！">
+    <meta name="twitter:image" content="https://114分科測驗倒數.tw/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4361ee">
+    
+    <!-- 網站導覽與 SEO -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <link rel="alternate" hreflang="zh-TW" href="https://114分科測驗倒數.tw">
+    
+    <!-- 結構化資料 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "114年分科測驗倒數計時",
+        "description": "114年分科測驗倒數計時器，幫助考生掌握備考時間",
+        "url": "https://114分科測驗倒數.tw",
+        "potentialAction": {
+            "@type": "ReadAction",
+            "target": "https://114分科測驗倒數.tw"
+        }
+    }
+    </script>
+    
+    <title>114年分科測驗倒數計時 | 2025年大學入學考試</title>
+    <link rel="canonical" href="https://114分科測驗倒數.tw">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="top-navigation animate__animated animate__fadeInDown" id="mainNavigation">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🎓</span>
+                <h2>114年分科測驗</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="https://tyctw.github.io/114clock/">會考倒數</a></li>
+                <li><a href="https://ceecc.vercel.app/">學測倒數</a></li>
+                <li><a href="https://tcte.onrender.com/">統測倒數</a></li>
+                
+                <!-- Theme toggle moved to navigation menu -->
+                <li class="theme-toggle-menu-item">
+                    <a href="#" id="mobileThemeToggle">
+                        <i class="fas fa-moon"></i>
+                        切換主題
+                    </a>
+                </li>
+                
+                <!-- Existing feature menu items -->
+                <li class="feature-menu-item">
+                    <a href="#" id="mobileStudyTimerBtn">
+                        <i class="fas fa-clock"></i>
+                        學習計時器
+                    </a>
+                </li>
+                <li class="feature-menu-item">
+                    <a href="#" id="mobileExamTipsBtn">
+                        <i class="fas fa-lightbulb"></i>
+                        考試小撇步
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="animate__animated animate__fadeInDown">
+            <h1>114年分科測驗倒數</h1>
+            <p class="subtitle">2025/7/11(五) – 2025/7/12(六)</p>
+        </header>
+        
+        <div class="countdown-container" id="countdown">
+            <div class="countdown-item">
+                <span id="days" class="countdown-value">--</span>
+                <span class="countdown-label">天</span>
+            </div>
+            <div class="countdown-item">
+                <span id="hours" class="countdown-value">--</span>
+                <span class="countdown-label">時</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes" class="countdown-value">--</span>
+                <span class="countdown-label">分</span>
+            </div>
+            <div class="countdown-item">
+                <span id="seconds" class="countdown-value">--</span>
+                <span class="countdown-label">秒</span>
+            </div>
+        </div>
+        
+        <div class="message-container">
+            <p id="message">距離114年分科測驗還有...</p>
+        </div>
+        
+        <div class="exam-schedule animate__animated animate__fadeIn" id="schedule">
+            <h2>考試日程</h2>
+            <div class="schedule-container">
+                <div class="day-schedule">
+                    <h3>7月11日 (五)</h3>
+                    <ul>
+                        <li><span class="subject physics">物理</span></li>
+                        <li><span class="subject chemistry">化學</span></li>
+                        <li><span class="subject math">數學甲</span></li>
+                        <li><span class="subject biology">生物</span></li>
+                    </ul>
+                </div>
+                <div class="day-schedule">
+                    <h3>7月12日 (六)</h3>
+                    <ul>
+                        <li><span class="subject history">歷史</span></li>
+                        <li><span class="subject geography">地理</span></li>
+                        <li><span class="subject civics">公民與社會</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="motivation-quote animate__animated animate__fadeIn" id="motivation">
+            <blockquote id="quoteText">
+                "成功不是偶然，而是日積月累的堅持與努力。"
+            </blockquote>
+            <div class="quote-buttons">
+                <button id="prevQuote" class="quote-btn"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextQuote" class="quote-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="quote-pagination" id="quotePagination">
+                <!-- 分頁指示點將由 JavaScript 動態生成 -->
+            </div>
+        </div>
+        
+        <footer>
+            <p>加油！祝福所有考生金榜題名！</p>
+            <p class="copyright">&copy; <span id="copyrightYear"></span> 114年分科測驗倒數計時</p>
+            
+            <div class="seo-footer">
+                <p>114年分科測驗倒數計時器是專為高中考生設計的備考工具，提供精確的考試倒數、完整的考試日程表、勵志名言以及學習計時器。幫助您更好地規劃備考時間，掌握考試節奏。</p>
+                <p>相關資訊：<a href="https://www.ceec.edu.tw/" target="_blank" rel="noopener">大學入學考試中心</a> | <a href="#schedule">分科測驗日程</a> | <a href="#motivation">考生勉勵</a></p>
+                <p>關鍵字：114年分科測驗、大學入學考試、高中升學、考試倒數計時、指考、學測、升大學、備考工具</p>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="studyTimerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>學習計時器</h2>
+            <div id="studyTimerDisplay">00:00:00</div>
+            <div class="timer-controls">
+                <button id="startStudyTimer">開始</button>
+                <button id="pauseStudyTimer">暫停</button>
+                <button id="resetStudyTimer">重置</button>
+            </div>
+            <div class="study-log">
+                <h3>今日學習紀錄</h3>
+                <ul id="studyLogList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="examTipsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>考試小撇步</h2>
+            <div class="exam-tips-container">
+                <div class="tip">
+                    <i class="fas fa-clock"></i>
+                    <h3>時間管理</h3>
+                    <p>合理分配每個題目的作答時間，不要在單一題目上花太多時間。</p>
+                </div>
+                <div class="tip">
+                    <i class="fas fa-brain"></i>
+                    <h3>心理調適</h3>
+                    <p>保持冷靜，深呼吸，相信自己的準備已經足夠。</p>
+                </div>
+                <div class="tip">
+                    <i class="fas fa-book-open"></i>
+                    <h3>答題技巧</h3>
+                    <p>由易到難，先做有把握的題目，再挑戰較難的題目。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-share">
+        <a href="#" id="shareLineBtn" class="share-btn line"><i class="fab fa-line"></i></a>
+        <a href="#" id="shareFacebookBtn" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+</body>
+</html>
