@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', function() {
         copyrightYearElem.textContent = new Date().getFullYear();
     }
     
+    // 通知功能相關變數
+    let notificationPermission = Notification.permission;
+    let notificationSettings = JSON.parse(localStorage.getItem('notificationSettings')) || {
+        oneMonth: false,
+        oneWeek: false,
+        threeDays: false,
+        oneDay: false,
+        examDay: false
+    };
+    let lastNotificationDays = JSON.parse(localStorage.getItem('lastNotificationDays')) || {};
+    
     function updateCountdown() {
         const currentDate = new Date();
         const difference = targetDate - currentDate;
@@ -497,4 +508,262 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // 通知功能
+    // 獲取元素
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationModal = document.getElementById('notificationModal');
+    const notificationStatus = document.getElementById('notificationStatus');
+    const requestPermissionBtn = document.getElementById('requestPermissionBtn');
+    const saveNotificationSettings = document.getElementById('saveNotificationSettings');
+    const testNotificationBtn = document.getElementById('testNotificationBtn');
+    
+    // 通知選項複選框
+    const notifyOneMonthCheckbox = document.getElementById('notifyOneMonth');
+    const notifyOneWeekCheckbox = document.getElementById('notifyOneWeek');
+    const notifyThreeDaysCheckbox = document.getElementById('notifyThreeDays');
+    const notifyOneDayCheckbox = document.getElementById('notifyOneDay');
+    const notifyExamDayCheckbox = document.getElementById('notifyExamDay');
+    
+    // 開啟通知模態窗口
+    notificationBtn.addEventListener('click', function() {
+        openNotificationModal();
+    });
+    
+    // 關閉模態窗口功能
+    document.querySelectorAll('.close-modal').forEach(function(closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            closeModal(modal);
+        });
+    });
+    
+    // 點擊模態窗口外部關閉
+    window.addEventListener('click', function(event) {
+        document.querySelectorAll('.modal').forEach(function(modal) {
+            if (event.target === modal) {
+                closeModal(modal);
+            }
+        });
+    });
+    
+    // 請求通知權限
+    requestPermissionBtn.addEventListener('click', function() {
+        requestNotificationPermission();
+    });
+    
+    // 儲存通知設置
+    saveNotificationSettings.addEventListener('click', function() {
+        saveSettings();
+    });
+    
+    // 測試通知
+    testNotificationBtn.addEventListener('click', function() {
+        sendTestNotification();
+    });
+    
+    // 開啟通知模態窗口
+    function openNotificationModal() {
+        // 更新權限狀態顯示
+        updatePermissionStatus();
+        
+        // 載入保存的設置
+        loadSavedSettings();
+        
+        // 顯示模態窗口
+        notificationModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // 關閉任何模態窗口
+    function closeModal(modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    
+    // 更新權限狀態顯示
+    function updatePermissionStatus() {
+        // 檢查當前權限
+        notificationPermission = Notification.permission;
+        
+        let statusText = '';
+        let statusClass = '';
+        
+        switch(notificationPermission) {
+            case 'granted':
+                statusText = '通知權限: 已允許';
+                statusClass = 'status-granted';
+                requestPermissionBtn.style.display = 'none';
+                saveNotificationSettings.disabled = false;
+                testNotificationBtn.disabled = false;
+                break;
+            case 'denied':
+                statusText = '通知權限: 已拒絕 (請在瀏覽器設置中啟用)';
+                statusClass = 'status-denied';
+                requestPermissionBtn.style.display = 'none';
+                saveNotificationSettings.disabled = true;
+                testNotificationBtn.disabled = true;
+                break;
+            default: // 'default' 或其他
+                statusText = '通知權限: 未請求';
+                statusClass = 'status-default';
+                requestPermissionBtn.style.display = 'block';
+                saveNotificationSettings.disabled = true;
+                testNotificationBtn.disabled = true;
+        }
+        
+        notificationStatus.textContent = statusText;
+        
+        // 清除先前的類別
+        notificationStatus.classList.remove('status-granted', 'status-denied', 'status-default');
+        notificationStatus.classList.add(statusClass);
+    }
+    
+    // 請求通知權限
+    function requestNotificationPermission() {
+        Notification.requestPermission().then(function(permission) {
+            notificationPermission = permission;
+            updatePermissionStatus();
+        });
+    }
+    
+    // 載入保存的設置
+    function loadSavedSettings() {
+        // 從 localStorage 載入設置
+        notificationSettings = JSON.parse(localStorage.getItem('notificationSettings')) || {
+            oneMonth: false,
+            oneWeek: false,
+            threeDays: false,
+            oneDay: false,
+            examDay: false
+        };
+        
+        // 更新 UI
+        notifyOneMonthCheckbox.checked = notificationSettings.oneMonth;
+        notifyOneWeekCheckbox.checked = notificationSettings.oneWeek;
+        notifyThreeDaysCheckbox.checked = notificationSettings.threeDays;
+        notifyOneDayCheckbox.checked = notificationSettings.oneDay;
+        notifyExamDayCheckbox.checked = notificationSettings.examDay;
+    }
+    
+    // 儲存設置
+    function saveSettings() {
+        // 更新設置對象
+        notificationSettings = {
+            oneMonth: notifyOneMonthCheckbox.checked,
+            oneWeek: notifyOneWeekCheckbox.checked,
+            threeDays: notifyThreeDaysCheckbox.checked,
+            oneDay: notifyOneDayCheckbox.checked,
+            examDay: notifyExamDayCheckbox.checked
+        };
+        
+        // 儲存到 localStorage
+        localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+        
+        // 提供用戶反饋
+        sendNotification('設置已儲存', '考試提醒已設置成功！');
+        
+        // 關閉模態窗口
+        closeModal(notificationModal);
+    }
+    
+    // 發送測試通知
+    function sendTestNotification() {
+        sendNotification('測試通知', '這是一則測試通知，確認您的設備可以接收提醒。');
+    }
+    
+    // 發送通知函數
+    function sendNotification(title, body) {
+        if (notificationPermission === 'granted') {
+            const options = {
+                body: body,
+                icon: '/favicon-32x32.png',
+                badge: '/favicon-16x16.png',
+                vibrate: [100, 50, 100],
+                tag: 'exam-notification'
+            };
+            
+            // 創建通知
+            try {
+                const notification = new Notification(title, options);
+                
+                // 點擊通知時處理
+                notification.onclick = function() {
+                    window.focus();
+                    notification.close();
+                };
+            } catch (error) {
+                console.error('無法發送通知:', error);
+            }
+        }
+    }
+    
+    // 檢查是否應該發送通知
+    function checkAndSendNotifications() {
+        if (notificationPermission !== 'granted') return;
+        
+        const currentDate = new Date();
+        const difference = targetDate - currentDate;
+        
+        // 考試已結束
+        if (difference < 0) return;
+        
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        
+        // 檢查各種通知條件
+        checkNotificationCondition(days, 30, 'oneMonth', '距離分科測驗還有一個月！', '是時候加緊複習了，為分科測驗做好最後準備。');
+        checkNotificationCondition(days, 7, 'oneWeek', '距離分科測驗還有一週！', '最後衝刺階段開始，調整好作息，保持好狀態！');
+        checkNotificationCondition(days, 3, 'threeDays', '距離分科測驗還有三天！', '檢查考試用品，調整心態，放輕鬆！');
+        checkNotificationCondition(days, 1, 'oneDay', '明天就是分科測驗！', '最後檢查考試證件、文具，早點休息，保持良好狀態！');
+        checkNotificationCondition(days, 0, 'examDay', '今天是分科測驗！', '祝所有考生今天順利，發揮實力，金榜題名！');
+    }
+    
+    // 檢查具體通知條件
+    function checkNotificationCondition(currentDays, targetDays, settingKey, title, body) {
+        // 檢查這個條件是否啟用和是否已經發送過通知
+        if (notificationSettings[settingKey] && currentDays === targetDays) {
+            // 檢查今天是否已經發送過這個通知
+            const today = new Date().toDateString();
+            if (lastNotificationDays[settingKey] !== today) {
+                // 發送通知
+                sendNotification(title, body);
+                
+                // 記錄已經發送過通知
+                lastNotificationDays[settingKey] = today;
+                localStorage.setItem('lastNotificationDays', JSON.stringify(lastNotificationDays));
+            }
+        }
+    }
+    
+    // 初始化通知功能
+    function initNotifications() {
+        // 初始化時檢查權限
+        notificationPermission = Notification.permission;
+        
+        // 變更按鈕文字
+        if (notificationPermission === 'granted') {
+            notificationBtn.innerHTML = '<i class="fas fa-bell"></i> 調整提醒';
+        } else {
+            notificationBtn.innerHTML = '<i class="fas fa-bell"></i> 開啟提醒';
+        }
+        
+        // 每天檢查一次是否需要發送通知
+        checkAndSendNotifications();
+        
+        // 設置每天定時檢查通知
+        // 設定為每天早上 8 點檢查
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 8, 0, 0);
+        const timeUntilTomorrow = tomorrow - now;
+        
+        // 首次啟動後，設置定時器
+        setTimeout(() => {
+            checkAndSendNotifications();
+            // 之後每24小時檢查一次
+            setInterval(checkAndSendNotifications, 24 * 60 * 60 * 1000);
+        }, timeUntilTomorrow);
+    }
+    
+    // 在頁面加載時初始化通知功能
+    initNotifications();
 });

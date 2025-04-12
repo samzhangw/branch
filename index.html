@@ -77,6 +77,14 @@
                 <li><a href="https://ceecc.vercel.app/">學測倒數</a></li>
                 <li><a href="https://tcte.onrender.com/">統測倒數</a></li>
                 
+                <!-- 添加通知按鈕 -->
+                <li class="feature-menu-item">
+                    <a href="#" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        開啟提醒
+                    </a>
+                </li>
+                
                 <!-- Theme toggle moved to navigation menu -->
                 <li class="theme-toggle-menu-item">
                     <a href="#" id="mobileThemeToggle">
@@ -215,6 +223,91 @@
                     <i class="fas fa-book-open"></i>
                     <h3>答題技巧</h3>
                     <p>由易到難，先做有把握的題目，再挑戰較難的題目。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>考試提醒設置</h2>
+            <div class="notification-container">
+                <div class="notification-header">
+                    <p class="notification-status" id="notificationStatus">通知權限: 未請求</p>
+                    <div class="notification-icon">
+                        <i class="fas fa-bell notification-bell-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="notification-settings">
+                    <h3>選擇提醒項目</h3>
+                    <div class="notification-option">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="notifyOneMonth" value="30">
+                            <span class="custom-checkbox"></span>
+                        </div>
+                        <label for="notifyOneMonth">
+                            <span class="notification-title">距離考試一個月</span>
+                            <span class="notification-desc">提前規劃最後衝刺階段</span>
+                        </label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="notifyOneWeek" value="7">
+                            <span class="custom-checkbox"></span>
+                        </div>
+                        <label for="notifyOneWeek">
+                            <span class="notification-title">距離考試一週</span>
+                            <span class="notification-desc">調整作息，保持良好狀態</span>
+                        </label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="notifyThreeDays" value="3">
+                            <span class="custom-checkbox"></span>
+                        </div>
+                        <label for="notifyThreeDays">
+                            <span class="notification-title">距離考試三天</span>
+                            <span class="notification-desc">檢查考試用品，調整心態</span>
+                        </label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="notifyOneDay" value="1">
+                            <span class="custom-checkbox"></span>
+                        </div>
+                        <label for="notifyOneDay">
+                            <span class="notification-title">距離考試一天</span>
+                            <span class="notification-desc">最後準備，早點休息</span>
+                        </label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="notifyExamDay" value="0">
+                            <span class="custom-checkbox"></span>
+                        </div>
+                        <label for="notifyExamDay">
+                            <span class="notification-title">考試當天提醒</span>
+                            <span class="notification-desc">考試日加油打氣</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="notification-actions">
+                    <button id="requestPermissionBtn" class="primary-btn">
+                        <i class="fas fa-check-circle"></i> 請求通知權限
+                    </button>
+                    <button id="saveNotificationSettings" class="primary-btn" disabled>
+                        <i class="fas fa-save"></i> 儲存設置
+                    </button>
+                    <button id="testNotificationBtn" class="secondary-btn" disabled>
+                        <i class="fas fa-bell"></i> 測試通知
+                    </button>
+                </div>
+                
+                <div class="notification-info">
+                    <p><i class="fas fa-info-circle"></i> 網頁通知僅在瀏覽器開啟時有效。若要在背景接收通知，請考慮安裝相關應用程式或設置日曆提醒。</p>
                 </div>
             </div>
         </div>

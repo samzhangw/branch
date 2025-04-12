@@ -835,10 +835,12 @@ body.dark-mode .seo-footer a:hover {
     border-radius: 20px;
     width: 85%;
     max-width: 700px;
+    max-height: 80vh;
     position: relative;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.4s ease forwards;
     border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow-y: auto;
 }
 
 @keyframes modalFadeIn {
@@ -1543,5 +1545,515 @@ body.dark-mode .seo-footer a:hover {
     /* 針對較小螢幕優化布局 */
     .container {
         width: calc(100% - 3rem);
+    }
+}
+
+/* 通知容器樣式 */
+.notification-container {
+    padding: 0.5rem 1rem;
+    overflow-x: hidden;
+}
+
+/* 通知狀態樣式 */
+.status-granted {
+    border-left: 4px solid #43aa8b;
+}
+
+.status-denied {
+    border-left: 4px solid #f72585;
+}
+
+.status-default {
+    border-left: 4px solid #f8961e;
+}
+
+/* 確保通知按鈕圖標正確顯示 */
+#notificationBtn i {
+    margin-right: 5px;
+}
+
+/* 通知模態窗口優化樣式 */
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.notification-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-slow 2s infinite ease-in-out;
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+}
+
+.notification-bell-icon {
+    color: white;
+    font-size: 28px;
+}
+
+.notification-status {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 12px 18px;
+    border-radius: 10px;
+    margin-right: 20px;
+    margin-bottom: 0;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.status-granted {
+    background-color: rgba(67, 170, 139, 0.15);
+    border-left: 4px solid #43aa8b;
+}
+
+.status-denied {
+    background-color: rgba(247, 37, 133, 0.1);
+    border-left: 4px solid #f72585;
+}
+
+.status-default {
+    background-color: rgba(248, 150, 30, 0.1);
+    border-left: 4px solid #f8961e;
+}
+
+body.dark-mode .status-granted {
+    background-color: rgba(67, 170, 139, 0.2);
+}
+
+body.dark-mode .status-denied {
+    background-color: rgba(247, 37, 133, 0.15);
+}
+
+body.dark-mode .status-default {
+    background-color: rgba(248, 150, 30, 0.15);
+}
+
+/* 自定義複選框樣式 */
+.checkbox-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
+}
+
+.notification-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.custom-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(67, 97, 238, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-option input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.notification-option input[type="checkbox"]:checked + .custom-checkbox::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.notification-option input[type="checkbox"]:focus + .custom-checkbox {
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+body.dark-mode .custom-checkbox {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(76, 201, 240, 0.4);
+}
+
+/* 通知選項美化 */
+.notification-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.notification-option:hover {
+    background-color: rgba(67, 97, 238, 0.05);
+    transform: translateX(5px);
+    border-color: rgba(67, 97, 238, 0.1);
+}
+
+body.dark-mode .notification-option:hover {
+    background-color: rgba(76, 201, 240, 0.1);
+    border-color: rgba(76, 201, 240, 0.2);
+}
+
+.notification-option label {
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 3px;
+    color: var(--text-dark);
+}
+
+.notification-desc {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+body.dark-mode .notification-title {
+    color: #f0f0f0;
+}
+
+body.dark-mode .notification-desc {
+    color: #a0a0a0;
+}
+
+/* 按鈕美化 */
+.notification-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.primary-btn, .secondary-btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Noto Sans TC', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), #3853d8);
+    color: white;
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+.primary-btn:hover {
+    background: linear-gradient(135deg, #3853d8, var(--primary-color));
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+}
+
+.secondary-btn {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-dark);
+}
+
+body.dark-mode .secondary-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #f0f0f0;
+}
+
+.secondary-btn:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+button:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.notification-info {
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    border-left: 4px solid var(--accent-color);
+}
+
+body.dark-mode .notification-info {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #a0a0a0;
+}
+
+.notification-info i {
+    margin-right: 8px;
+    color: var(--accent-color);
+}
+
+@keyframes pulse-slow {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+}
+
+/* 移動端樣式優化 */
+@media (max-width: 480px) {
+    .notification-header {
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+    
+    .notification-status {
+        width: 100%;
+        margin-right: 0;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    
+    .notification-icon {
+        margin: 0 auto;
+    }
+    
+    .notification-actions {
+        flex-direction: column;
+    }
+    
+    .notification-option {
+        padding: 8px 10px;
+        margin-bottom: 10px;
+    }
+    
+    .notification-container {
+        padding: 1rem 0.8rem;
+    }
+    
+    .notification-title {
+        font-size: 0.95rem;
+    }
+    
+    .notification-desc {
+        font-size: 0.8rem;
+    }
+}
+
+.notification-settings {
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+body.dark-mode .notification-settings {
+    background-color: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.notification-settings h3 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.notification-settings h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+/* 添加模態窗口滾動條樣式 */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(67, 97, 238, 0.2);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(67, 97, 238, 0.4);
+}
+
+body.dark-mode .modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .modal-content::-webkit-scrollbar-thumb {
+    background: rgba(76, 201, 240, 0.3);
+}
+
+body.dark-mode .modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(76, 201, 240, 0.5);
+}
+
+/* 針對小螢幕裝置優化通知模態窗口 */
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 5% auto;
+        padding: 20px 15px;
+        max-height: 85vh;
+        width: 92%;
+    }
+    
+    .notification-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .notification-bell-icon {
+        font-size: 22px;
+    }
+    
+    .notification-option {
+        padding: 8px 10px;
+        margin-bottom: 10px;
+    }
+    
+    .notification-settings {
+        padding: 12px;
+    }
+    
+    .notification-settings h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    .primary-btn, .secondary-btn {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .notification-title {
+        font-size: 0.9rem;
+    }
+    
+    .notification-desc {
+        font-size: 0.75rem;
+    }
+    
+    .notification-info {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .close-modal {
+        top: 5px;
+        right: 5px;
+    }
+}
+
+/* 針對超小螢幕設備進一步優化 */
+@media (max-width: 360px) {
+    .modal-content {
+        padding: 15px 12px;
+        margin: 3% auto;
+    }
+    
+    .notification-header {
+        margin-bottom: 15px;
+    }
+    
+    .notification-status {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .notification-bell-icon {
+        font-size: 18px;
+    }
+    
+    .notification-option {
+        padding: 6px 8px;
+        margin-bottom: 8px;
+    }
+    
+    .notification-title {
+        font-size: 0.85rem;
+    }
+    
+    .notification-desc {
+        font-size: 0.7rem;
+    }
+    
+    .notification-settings {
+        padding: 10px;
+    }
+    
+    .notification-actions {
+        gap: 8px;
+        margin: 15px 0;
+    }
+    
+    .primary-btn, .secondary-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .checkbox-wrapper {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
     }
 }
