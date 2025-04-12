@@ -644,6 +644,23 @@ document.addEventListener('DOMContentLoaded', function() {
         notifyThreeDaysCheckbox.checked = notificationSettings.threeDays;
         notifyOneDayCheckbox.checked = notificationSettings.oneDay;
         notifyExamDayCheckbox.checked = notificationSettings.examDay;
+        
+        // 確保複選框視覺效果與狀態一致
+        updateCheckboxVisuals();
+    }
+    
+    // 更新複選框視覺效果
+    function updateCheckboxVisuals() {
+        const checkboxes = document.querySelectorAll('.checkbox-hidden');
+        checkboxes.forEach(checkbox => {
+            // 檢查關聯的標籤和自定義複選框
+            const customCheckbox = checkbox.nextElementSibling.querySelector('.checkbox-custom');
+            if (checkbox.checked) {
+                customCheckbox.classList.add('checked');
+            } else {
+                customCheckbox.classList.remove('checked');
+            }
+        });
     }
     
     // 儲存設置
@@ -746,6 +763,23 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             notificationBtn.innerHTML = '<i class="fas fa-bell"></i> 開啟提醒';
         }
+        
+        // 設置複選框事件監聽
+        const checkboxes = document.querySelectorAll('.checkbox-hidden');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateCheckboxVisuals();
+            });
+            
+            // 支援標籤點擊
+            const label = checkbox.nextElementSibling;
+            if (label) {
+                label.addEventListener('click', function(e) {
+                    // 阻止事件冒泡避免重複觸發
+                    e.stopPropagation();
+                });
+            }
+        });
         
         // 每天檢查一次是否需要發送通知
         checkAndSendNotifications();

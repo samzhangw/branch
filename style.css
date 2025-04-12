@@ -1503,73 +1503,88 @@ body.dark-mode .seo-footer a:hover {
     100% { transform: translateY(0); }
 }
 
-/* 改進移動裝置上的觸控效果 */
-@media (max-width: 768px) {
-    .nav-links li a:active {
-        background-color: rgba(255, 255, 255, 0.35);
-        transform: scale(0.98);
+/* 移動端樣式優化 */
+@media (max-width: 480px) {
+    .notification-header {
+        flex-direction: column-reverse;
+        gap: 15px;
     }
     
-    .feature-menu-item:active,
-    .theme-toggle-menu-item:active {
-        background-color: rgba(255, 255, 255, 0.4);
-        transform: translateX(8px);
+    .notification-status {
+        width: 100%;
+        margin-right: 0;
+        font-size: 0.9rem;
+        text-align: center;
     }
     
-    .countdown-item:active {
-        transform: scale(0.95);
+    .notification-icon {
+        margin: 0 auto;
+        width: 50px;
+        height: 50px;
     }
     
-    .subject:active {
-        transform: scale(0.9);
+    .notification-bell-icon {
+        font-size: 22px;
     }
     
-    .share-btn:active {
-        transform: scale(0.9);
+    .notification-actions {
+        flex-direction: column;
     }
     
-    .timer-controls button:active {
-        transform: scale(0.95);
-        background: var(--accent-color);
+    .notification-option {
+        padding: 8px 10px;
+        margin-bottom: 10px;
     }
     
-    .tip:active {
-        transform: scale(0.98);
+    .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
     }
     
-    /* 讓所有動畫更快，提高響應速度 */
-    * {
-        transition-duration: 0.2s !important;
+    .notification-container {
+        padding: 1rem 0.8rem;
     }
     
-    /* 針對較小螢幕優化布局 */
-    .container {
-        width: calc(100% - 3rem);
+    .notification-title {
+        font-size: 0.9rem;
+    }
+    
+    .notification-desc {
+        font-size: 0.75rem;
+    }
+    
+    .notification-settings {
+        padding: 12px;
+    }
+    
+    .notification-settings h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    .primary-btn, .secondary-btn {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+    
+    .notification-info {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .close-modal {
+        top: 5px;
+        right: 5px;
     }
 }
+
+/* ... existing code ... */
 
 /* 通知容器樣式 */
 .notification-container {
     padding: 0.5rem 1rem;
     overflow-x: hidden;
-}
-
-/* 通知狀態樣式 */
-.status-granted {
-    border-left: 4px solid #43aa8b;
-}
-
-.status-denied {
-    border-left: 4px solid #f72585;
-}
-
-.status-default {
-    border-left: 4px solid #f8961e;
-}
-
-/* 確保通知按鈕圖標正確顯示 */
-#notificationBtn i {
-    margin-right: 5px;
 }
 
 /* 通知模態窗口優化樣式 */
@@ -1636,70 +1651,52 @@ body.dark-mode .status-default {
     background-color: rgba(248, 150, 30, 0.15);
 }
 
-/* 自定義複選框樣式 */
-.checkbox-wrapper {
+/* 確保通知按鈕圖標正確顯示 */
+#notificationBtn i {
+    margin-right: 5px;
+}
+
+.notification-settings {
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+body.dark-mode .notification-settings {
+    background-color: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.notification-settings h3 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
     position: relative;
     display: inline-block;
-    width: 24px;
-    height: 24px;
-    margin-right: 15px;
+    padding-bottom: 10px;
 }
 
-.notification-option input[type="checkbox"] {
+.notification-settings h3::after {
+    content: '';
     position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.custom-checkbox {
-    position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
-    width: 22px;
-    height: 22px;
-    background-color: rgba(0, 0, 0, 0.05);
-    border: 2px solid rgba(67, 97, 238, 0.3);
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
 }
 
-.notification-option input[type="checkbox"]:checked + .custom-checkbox {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.notification-option input[type="checkbox"]:checked + .custom-checkbox::after {
-    content: '\f00c';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: white;
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.notification-option input[type="checkbox"]:focus + .custom-checkbox {
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-}
-
-body.dark-mode .custom-checkbox {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(76, 201, 240, 0.4);
-}
-
-/* 通知選項美化 */
+/* 通知選項和複選框樣式 */
 .notification-option {
     display: flex;
-    align-items: center;
     margin-bottom: 15px;
     padding: 10px 15px;
     border-radius: 12px;
     transition: all 0.3s ease;
     border: 1px solid transparent;
+    position: relative;
 }
 
 .notification-option:hover {
@@ -1713,9 +1710,61 @@ body.dark-mode .notification-option:hover {
     border-color: rgba(76, 201, 240, 0.2);
 }
 
-.notification-option label {
+.checkbox-hidden {
+    position: absolute;
+    opacity: 0;
     cursor: pointer;
-    font-size: 0.95rem;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.checkbox-custom {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(67, 97, 238, 0.3);
+    border-radius: 6px;
+    margin-right: 15px;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-hidden:checked + .checkbox-label .checkbox-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-hidden:checked + .checkbox-label .checkbox-custom::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-hidden:focus + .checkbox-label .checkbox-custom {
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+body.dark-mode .checkbox-custom {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(76, 201, 240, 0.4);
+}
+
+.option-text {
     display: flex;
     flex-direction: column;
 }
@@ -1834,78 +1883,6 @@ body.dark-mode .notification-info {
     }
 }
 
-/* 移動端樣式優化 */
-@media (max-width: 480px) {
-    .notification-header {
-        flex-direction: column-reverse;
-        gap: 15px;
-    }
-    
-    .notification-status {
-        width: 100%;
-        margin-right: 0;
-        font-size: 0.9rem;
-        text-align: center;
-    }
-    
-    .notification-icon {
-        margin: 0 auto;
-    }
-    
-    .notification-actions {
-        flex-direction: column;
-    }
-    
-    .notification-option {
-        padding: 8px 10px;
-        margin-bottom: 10px;
-    }
-    
-    .notification-container {
-        padding: 1rem 0.8rem;
-    }
-    
-    .notification-title {
-        font-size: 0.95rem;
-    }
-    
-    .notification-desc {
-        font-size: 0.8rem;
-    }
-}
-
-.notification-settings {
-    margin-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
-}
-
-body.dark-mode .notification-settings {
-    background-color: rgba(255, 255, 255, 0.03);
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.notification-settings h3 {
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 10px;
-}
-
-.notification-settings h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: 3px;
-}
-
 /* 添加模態窗口滾動條樣式 */
 .modal-content::-webkit-scrollbar {
     width: 6px;
@@ -1937,16 +1914,22 @@ body.dark-mode .modal-content::-webkit-scrollbar-thumb:hover {
     background: rgba(76, 201, 240, 0.5);
 }
 
-/* 針對小螢幕裝置優化通知模態窗口 */
+/* 移動端樣式優化 */
 @media (max-width: 480px) {
-    .modal-content {
-        margin: 5% auto;
-        padding: 20px 15px;
-        max-height: 85vh;
-        width: 92%;
+    .notification-header {
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+    
+    .notification-status {
+        width: 100%;
+        margin-right: 0;
+        font-size: 0.9rem;
+        text-align: center;
     }
     
     .notification-icon {
+        margin: 0 auto;
         width: 50px;
         height: 50px;
     }
@@ -1955,9 +1938,31 @@ body.dark-mode .modal-content::-webkit-scrollbar-thumb:hover {
         font-size: 22px;
     }
     
+    .notification-actions {
+        flex-direction: column;
+    }
+    
     .notification-option {
         padding: 8px 10px;
         margin-bottom: 10px;
+    }
+    
+    .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+    
+    .notification-container {
+        padding: 1rem 0.8rem;
+    }
+    
+    .notification-title {
+        font-size: 0.9rem;
+    }
+    
+    .notification-desc {
+        font-size: 0.75rem;
     }
     
     .notification-settings {
@@ -1974,14 +1979,6 @@ body.dark-mode .modal-content::-webkit-scrollbar-thumb:hover {
         font-size: 0.95rem;
     }
     
-    .notification-title {
-        font-size: 0.9rem;
-    }
-    
-    .notification-desc {
-        font-size: 0.75rem;
-    }
-    
     .notification-info {
         padding: 12px;
         font-size: 0.8rem;
@@ -1990,70 +1987,5 @@ body.dark-mode .modal-content::-webkit-scrollbar-thumb:hover {
     .close-modal {
         top: 5px;
         right: 5px;
-    }
-}
-
-/* 針對超小螢幕設備進一步優化 */
-@media (max-width: 360px) {
-    .modal-content {
-        padding: 15px 12px;
-        margin: 3% auto;
-    }
-    
-    .notification-header {
-        margin-bottom: 15px;
-    }
-    
-    .notification-status {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-    }
-    
-    .notification-icon {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .notification-bell-icon {
-        font-size: 18px;
-    }
-    
-    .notification-option {
-        padding: 6px 8px;
-        margin-bottom: 8px;
-    }
-    
-    .notification-title {
-        font-size: 0.85rem;
-    }
-    
-    .notification-desc {
-        font-size: 0.7rem;
-    }
-    
-    .notification-settings {
-        padding: 10px;
-    }
-    
-    .notification-actions {
-        gap: 8px;
-        margin: 15px 0;
-    }
-    
-    .primary-btn, .secondary-btn {
-        padding: 8px 12px;
-        font-size: 0.85rem;
-        border-radius: 8px;
-    }
-    
-    .custom-checkbox {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .checkbox-wrapper {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
     }
 }
