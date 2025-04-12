@@ -1,3 +1,66 @@
+// 在 DOMContentLoaded 事件之前添加 Service Worker 更新處理代碼
+// Service Worker 更新處理
+if ('serviceWorker' in navigator) {
+    let refreshing = false;
+    
+    // 註冊 Service Worker
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('ServiceWorker 註冊成功:', registration.scope);
+                
+                // 檢查更新
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    
+                    // 監聽新 Service Worker 的狀態變化
+                    newWorker.addEventListener('statechange', () => {
+                        // 當新的 Service Worker 已安裝，但尚未激活（等待刷新頁面）
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('新版本已下載，等待啟用');
+                            showUpdateToast();
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.log('ServiceWorker 註冊失敗:', error);
+            });
+            
+        // 監聽控制權變更（當新的 Service Worker 接管頁面）
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                refreshing = true;
+                console.log('新的 Service Worker 已接管頁面，正在刷新...');
+                window.location.reload();
+            }
+        });
+    });
+}
+
+// 顯示更新提示
+function showUpdateToast() {
+    const updateToast = document.getElementById('updateToast');
+    const updateButton = document.getElementById('updateButton');
+    const dismissButton = document.getElementById('dismissButton');
+    
+    if (updateToast) {
+        // 顯示提示
+        updateToast.style.display = 'block';
+        
+        // 點擊更新按鈕
+        updateButton.addEventListener('click', () => {
+            // 強制重新載入頁面，使新的 Service Worker 接管
+            window.location.reload();
+        });
+        
+        // 點擊關閉按鈕
+        dismissButton.addEventListener('click', () => {
+            updateToast.style.display = 'none';
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // 設定目標日期: 2025年7月11日 (114年分科測驗第一天)
     const targetDate = new Date('2025-07-11T08:00:00+08:00');
@@ -518,12 +581,97 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveNotificationSettings = document.getElementById('saveNotificationSettings');
     const testNotificationBtn = document.getElementById('testNotificationBtn');
     
+    // 每日通知相關元素
+    const notifyDailyCheckbox = document.getElementById('notifyDaily');
+    const dailyNotificationStatus = document.getElementById('dailyNotificationStatus');
+    const dailyNotificationStatusText = document.getElementById('dailyNotificationStatusText');
+    const testDailyNotificationBtn = document.getElementById('testDailyNotificationBtn');
+    
     // 通知選項複選框
     const notifyOneMonthCheckbox = document.getElementById('notifyOneMonth');
     const notifyOneWeekCheckbox = document.getElementById('notifyOneWeek');
     const notifyThreeDaysCheckbox = document.getElementById('notifyThreeDays');
     const notifyOneDayCheckbox = document.getElementById('notifyOneDay');
     const notifyExamDayCheckbox = document.getElementById('notifyExamDay');
+    
+    // 每日通知設置
+    let dailyNotificationEnabled = localStorage.getItem('dailyNotificationEnabled') === 'true';
+    
+    // 更新每日通知設置
+    function updateDailyNotificationStatus() {
+        if (notificationPermission === 'granted') {
+            dailyNotificationStatus.style.display = 'block';
+            
+            // 從 Service Worker 獲取當前狀態
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'GET_DAILY_NOTIFICATIONS_STATUS'
+                });
+            } else {
+                dailyNotificationStatusText.textContent = '無法獲取每日通知狀態，請稍後再試';
+            }
+            
+            // 根據本地設置更新複選框狀態
+            notifyDailyCheckbox.checked = dailyNotificationEnabled;
+        } else {
+            dailyNotificationStatus.style.display = 'none';
+        }
+    }
+    
+    // 啟用/禁用每日通知
+    function toggleDailyNotifications(enabled) {
+        if (notificationPermission !== 'granted') return;
+        
+        // 保存到本地
+        dailyNotificationEnabled = enabled;
+        localStorage.setItem('dailyNotificationEnabled', enabled);
+        
+        // 通知 Service Worker
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'TOGGLE_DAILY_NOTIFICATIONS',
+                enabled: enabled
+            });
+            
+            // 更新界面顯示
+            notifyDailyCheckbox.checked = enabled;
+            
+            // 更新狀態訊息
+            if (enabled) {
+                dailyNotificationStatusText.textContent = '每日通知已啟用，將於每天早上 8:00 發送';
+            } else {
+                dailyNotificationStatusText.textContent = '每日通知已禁用';
+            }
+        }
+    }
+    
+    // 發送每日通知測試
+    function testDailyNotification() {
+        if (notificationPermission !== 'granted') return;
+        
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'SEND_TEST_DAILY_NOTIFICATION'
+            });
+        } else {
+            alert('Service Worker 尚未準備好，請稍後再試');
+        }
+    }
+    
+    // 監聽來自 Service Worker 的訊息
+    navigator.serviceWorker.addEventListener('message', function(event) {
+        if (event.data) {
+            // 處理每日通知狀態更新
+            if (event.data.type === 'DAILY_NOTIFICATIONS_STATUS') {
+                dailyNotificationStatusText.textContent = event.data.message;
+            }
+            
+            // 處理測試通知結果
+            if (event.data.type === 'TEST_NOTIFICATION_SENT' && event.data.success) {
+                console.log('測試通知發送成功');
+            }
+        }
+    });
     
     // 開啟通知模態窗口
     notificationBtn.addEventListener('click', function() {
@@ -562,6 +710,20 @@ document.addEventListener('DOMContentLoaded', function() {
         sendTestNotification();
     });
     
+    // 測試每日通知
+    if (testDailyNotificationBtn) {
+        testDailyNotificationBtn.addEventListener('click', function() {
+            testDailyNotification();
+        });
+    }
+    
+    // 每日通知複選框更改事件
+    if (notifyDailyCheckbox) {
+        notifyDailyCheckbox.addEventListener('change', function() {
+            toggleDailyNotifications(this.checked);
+        });
+    }
+    
     // 開啟通知模態窗口
     function openNotificationModal() {
         // 更新權限狀態顯示
@@ -569,6 +731,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 載入保存的設置
         loadSavedSettings();
+        
+        // 更新每日通知狀態
+        updateDailyNotificationStatus();
         
         // 顯示模態窗口
         notificationModal.style.display = 'flex';
@@ -596,6 +761,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 requestPermissionBtn.style.display = 'none';
                 saveNotificationSettings.disabled = false;
                 testNotificationBtn.disabled = false;
+                testDailyNotificationBtn.disabled = false;
                 break;
             case 'denied':
                 statusText = '通知權限: 已拒絕 (請在瀏覽器設置中啟用)';
@@ -603,6 +769,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 requestPermissionBtn.style.display = 'none';
                 saveNotificationSettings.disabled = true;
                 testNotificationBtn.disabled = true;
+                testDailyNotificationBtn.disabled = true;
                 break;
             default: // 'default' 或其他
                 statusText = '通知權限: 未請求';
@@ -610,6 +777,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 requestPermissionBtn.style.display = 'block';
                 saveNotificationSettings.disabled = true;
                 testNotificationBtn.disabled = true;
+                testDailyNotificationBtn.disabled = true;
         }
         
         notificationStatus.textContent = statusText;
@@ -624,6 +792,11 @@ document.addEventListener('DOMContentLoaded', function() {
         Notification.requestPermission().then(function(permission) {
             notificationPermission = permission;
             updatePermissionStatus();
+            
+            // 如果權限被授予，更新每日通知狀態
+            if (permission === 'granted') {
+                updateDailyNotificationStatus();
+            }
         });
     }
     
@@ -638,12 +811,16 @@ document.addEventListener('DOMContentLoaded', function() {
             examDay: false
         };
         
+        // 載入每日通知設置
+        dailyNotificationEnabled = localStorage.getItem('dailyNotificationEnabled') === 'true';
+        
         // 更新 UI
         notifyOneMonthCheckbox.checked = notificationSettings.oneMonth;
         notifyOneWeekCheckbox.checked = notificationSettings.oneWeek;
         notifyThreeDaysCheckbox.checked = notificationSettings.threeDays;
         notifyOneDayCheckbox.checked = notificationSettings.oneDay;
         notifyExamDayCheckbox.checked = notificationSettings.examDay;
+        notifyDailyCheckbox.checked = dailyNotificationEnabled;
         
         // 確保複選框視覺效果與狀態一致
         updateCheckboxVisuals();
@@ -676,6 +853,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 儲存到 localStorage
         localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+        
+        // 儲存每日通知設置
+        toggleDailyNotifications(notifyDailyCheckbox.checked);
         
         // 提供用戶反饋
         sendNotification('設置已儲存', '考試提醒已設置成功！');
@@ -780,6 +960,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+        
+        // 獲取已儲存的每日通知設置
+        if (notificationPermission === 'granted' && dailyNotificationEnabled) {
+            // 初始化每日通知
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'TOGGLE_DAILY_NOTIFICATIONS',
+                    enabled: true
+                });
+            }
+        }
         
         // 每天檢查一次是否需要發送通知
         checkAndSendNotifications();

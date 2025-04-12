@@ -51,6 +51,9 @@
     }
     </script>
     
+    <!-- PWA 支援 -->
+    <link rel="manifest" href="/manifest.json">
+    
     <title>114年分科測驗倒數計時 | 2025年大學入學考試</title>
     <link rel="canonical" href="https://114分科測驗倒數.tw">
     <link rel="stylesheet" href="style.css">
@@ -242,6 +245,22 @@
                 
                 <div class="notification-settings">
                     <h3>選擇提醒項目</h3>
+                    
+                    <!-- 每日通知選項 -->
+                    <div class="notification-option daily-notification-option">
+                        <input type="checkbox" id="notifyDaily" class="checkbox-hidden">
+                        <label for="notifyDaily" class="checkbox-label">
+                            <span class="checkbox-custom"></span>
+                            <div class="option-text">
+                                <span class="notification-title">每日提醒</span>
+                                <span class="notification-desc">每天早上8點發送倒數提醒和勵志訊息</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="daily-notification-status" id="dailyNotificationStatus" style="display: none;">
+                        <i class="fas fa-info-circle"></i> <span id="dailyNotificationStatusText">每日通知狀態載入中...</span>
+                    </div>
+                    
                     <div class="notification-option">
                         <input type="checkbox" id="notifyOneMonth" value="30" class="checkbox-hidden">
                         <label for="notifyOneMonth" class="checkbox-label">
@@ -304,6 +323,10 @@
                     <button id="testNotificationBtn" class="secondary-btn" disabled>
                         <i class="fas fa-bell"></i> 測試通知
                     </button>
+                    <!-- 每日通知測試按鈕 -->
+                    <button id="testDailyNotificationBtn" class="secondary-btn" disabled>
+                        <i class="fas fa-calendar-day"></i> 測試每日通知
+                    </button>
                 </div>
                 
                 <div class="notification-info">
@@ -316,6 +339,19 @@
     <div class="social-share">
         <a href="#" id="shareLineBtn" class="share-btn line"><i class="fab fa-line"></i></a>
         <a href="#" id="shareFacebookBtn" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
+    </div>
+
+    <!-- Service Worker 更新提示 -->
+    <div id="updateToast" class="update-toast" style="display: none;">
+        <div class="update-toast-content">
+            <i class="fas fa-sync-alt update-icon"></i>
+            <div class="update-message">
+                <strong>有新版本可用</strong>
+                <p>請重新整理頁面以獲取最新功能</p>
+            </div>
+            <button id="updateButton" class="update-button">更新</button>
+            <button id="dismissButton" class="dismiss-button"><i class="fas fa-times"></i></button>
+        </div>
     </div>
 
     <script src="script.js"></script>
