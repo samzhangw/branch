@@ -61,136 +61,252 @@ function showUpdateToast() {
     }
 }
 
+// 更新腳本中的特效和動畫
+
 document.addEventListener('DOMContentLoaded', function() {
-    // 設定目標日期: 2025年7月11日 (114年分科測驗第一天)
-    const targetDate = new Date('2025-07-11T08:00:00+08:00');
+    // 設定目標日期: 2026年7月10-11日 (115年分科測驗第一天)
+    const targetDate = new Date('2026-07-10T08:00:00+08:00');
     
     // 設定版權年份自動更新
-    const copyrightYearElem = document.getElementById('copyrightYear');
-    if (copyrightYearElem) {
-        copyrightYearElem.textContent = new Date().getFullYear();
-    }
+    document.getElementById('copyrightYear').textContent = new Date().getFullYear();
     
-    // 通知功能相關變數
-    let notificationPermission = Notification.permission;
-    let notificationSettings = JSON.parse(localStorage.getItem('notificationSettings')) || {
-        oneMonth: false,
-        oneWeek: false,
-        threeDays: false,
-        oneDay: false,
-        examDay: false
-    };
-    let lastNotificationDays = JSON.parse(localStorage.getItem('lastNotificationDays')) || {};
-    
+    // 倒數計時更新函數
     function updateCountdown() {
-        const currentDate = new Date();
-        const difference = targetDate - currentDate;
+        const now = new Date();
+        const timeDifference = targetDate - now;
         
-        // 考試已經開始或結束
-        if (difference < 0) {
+        // 如果時間差小於零，代表時間已過
+        if (timeDifference <= 0) {
             document.getElementById('days').textContent = '0';
             document.getElementById('hours').textContent = '0';
             document.getElementById('minutes').textContent = '0';
             document.getElementById('seconds').textContent = '0';
-            document.getElementById('message').textContent = '考試已開始，祝福所有考生順利！';
+            document.getElementById('message').textContent = '115年分科測驗已經開始！';
             return;
         }
         
-        // 計算剩餘時間
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        // 計算天、時、分、秒
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
         
-        // 儲存舊值以檢查是否變化
-        const oldDays = document.getElementById('days').textContent;
-        const oldHours = document.getElementById('hours').textContent;
-        const oldMinutes = document.getElementById('minutes').textContent;
-        const oldSeconds = document.getElementById('seconds').textContent;
-        
-        // 更新 DOM
-        document.getElementById('days').textContent = days;
-        document.getElementById('hours').textContent = hours;
-        document.getElementById('minutes').textContent = minutes;
-        document.getElementById('seconds').textContent = seconds;
-        
-        // 添加動畫效果當數值變化時
-        if (oldDays !== days.toString()) document.getElementById('days').classList.add('pulse');
-        if (oldHours !== hours.toString()) document.getElementById('hours').classList.add('pulse');
-        if (oldMinutes !== minutes.toString()) document.getElementById('minutes').classList.add('pulse');
-        if (oldSeconds !== seconds.toString()) document.getElementById('seconds').classList.add('pulse');
-        
-        // 移除動畫類以便再次觸發
-        setTimeout(() => {
-            document.querySelectorAll('.countdown-value').forEach(el => {
-                el.classList.remove('pulse');
-            });
-        }, 500);
+        // 更新倒數計時顯示
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
         
         // 根據剩餘天數更新訊息
         if (days > 30) {
-            document.getElementById('message').textContent = '距離114年分科測驗還有很長一段時間，穩定學習，按部就班！';
+            document.getElementById('message').textContent = '距離115年分科測驗還有很長一段時間，穩定學習，按部就班！';
         } else if (days > 7) {
-            document.getElementById('message').textContent = '距離114年分科測驗還有不到一個月，調整狀態，保持專注！';
+            document.getElementById('message').textContent = '距離115年分科測驗還有不到一個月，調整狀態，保持專注！';
         } else if (days > 1) {
-            document.getElementById('message').textContent = '距離114年分科測驗只剩下幾天，做好最後準備，保持冷靜！';
+            document.getElementById('message').textContent = '距離115年分科測驗只剩下幾天，做好最後準備，保持冷靜！';
         } else {
-            document.getElementById('message').textContent = '明天就是114年分科測驗，放鬆心情，相信自己！';
+            document.getElementById('message').textContent = '明天就是115年分科測驗，放鬆心情，相信自己！';
+        }
+        
+        // 添加數字變化的動畫效果
+        animateCountdownValue('days');
+        animateCountdownValue('hours');
+        animateCountdownValue('minutes');
+        animateCountdownValue('seconds');
+    }
+    
+    // 添加數字變化時的動畫效果
+    function animateCountdownValue(elementId) {
+        const element = document.getElementById(elementId);
+        element.classList.add('pulse-animation');
+        setTimeout(() => {
+            element.classList.remove('pulse-animation');
+        }, 500);
+    }
+    
+    // 初始執行更新倒數計時
+    updateCountdown();
+    
+    // 每秒更新一次倒數計時
+    setInterval(updateCountdown, 1000);
+    
+    // 名言佳句切換
+    const quotes = [
+        "成功不是偶然，而是日積月累的堅持與努力。",
+        "每天進步一點點，成功就會更近一點點。",
+        "沒有人能回到過去重新開始，但現在開始，卻能書寫一個全然不同的結局。",
+        "天賦決定上限，努力決定下限。",
+        "機會不會從天而降，只會在努力中呈現。",
+        "學習是一條漫長的道路，每一步都帶你走向更廣闊的世界。",
+        "失敗是成功的墊腳石，每一次跌倒都是為了下一次更好的跳躍。",
+        "即使道路坎坷不平，也不要害怕，勇敢踏出每一步！",
+        "只要開始了，就不要輕言放棄，堅持下去，你會看到不一樣的自己。",
+        "成功的路上並不擁擠，因為堅持下來的人不多。"
+    ];
+    
+    const quoteText = document.getElementById('quoteText');
+    const prevQuoteBtn = document.getElementById('prevQuote');
+    const nextQuoteBtn = document.getElementById('nextQuote');
+    const quotePagination = document.getElementById('quotePagination');
+    
+    let currentQuoteIndex = 0;
+    
+    // 創建分頁指示點
+    function createPaginationDots() {
+        quotePagination.innerHTML = '';
+        for (let i = 0; i < quotes.length; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('pagination-dot');
+            if (i === currentQuoteIndex) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => showQuote(i));
+            quotePagination.appendChild(dot);
         }
     }
     
-    // 初始更新
-    updateCountdown();
-    
-    // 每秒更新一次
-    setInterval(updateCountdown, 1000);
-    
-    // 添加視覺效果於倒數區塊
-    const countdownItems = document.querySelectorAll('.countdown-item');
-    countdownItems.forEach((item, index) => {
+    // 顯示指定索引的名言
+    function showQuote(index) {
+        // 添加淡出效果
+        quoteText.classList.add('fade-out');
+        
         setTimeout(() => {
-            item.classList.add('animate__animated', 'animate__fadeInUp');
-        }, 300 * index);
+            currentQuoteIndex = index;
+            if (currentQuoteIndex < 0) {
+                currentQuoteIndex = quotes.length - 1;
+            } else if (currentQuoteIndex >= quotes.length) {
+                currentQuoteIndex = 0;
+            }
+            
+            // 更新名言文字
+            quoteText.textContent = quotes[currentQuoteIndex];
+            
+            // 更新分頁指示點的活動狀態
+            const dots = document.querySelectorAll('.pagination-dot');
+            dots.forEach((dot, i) => {
+                if (i === currentQuoteIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+            
+            // 添加淡入效果
+            quoteText.classList.remove('fade-out');
+            quoteText.classList.add('fade-in');
+            
+            setTimeout(() => {
+                quoteText.classList.remove('fade-in');
+            }, 500);
+        }, 300);
+    }
+    
+    // 初始化名言分頁
+    createPaginationDots();
+    
+    // 點擊按鈕切換名言
+    prevQuoteBtn.addEventListener('click', () => {
+        showQuote(currentQuoteIndex - 1);
     });
+    
+    nextQuoteBtn.addEventListener('click', () => {
+        showQuote(currentQuoteIndex + 1);
+    });
+    
+    // 自動切換名言
+    setInterval(() => {
+        showQuote(currentQuoteIndex + 1);
+    }, 15000); // 每15秒自動切換一次
+    
+    // 添加CSS動畫類
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .pulse-animation {
+            animation: pulse-animation 0.5s ease;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // 初始化介面動畫
+    initAnimations();
+    
+    // 初始化介面動畫
+    function initAnimations() {
+        // 添加考試科目的動畫延遲
+        const subjects = document.querySelectorAll('.subject');
+        subjects.forEach((subject, index) => {
+            subject.style.animationDelay = `${index * 0.2}s`;
+            subject.classList.add('animate__animated', 'animate__fadeInUp');
+        });
+        
+        // 倒數計時項的動畫
+        const countdownItems = document.querySelectorAll('.countdown-item');
+        countdownItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.15}s`;
+            item.classList.add('animate__animated', 'animate__fadeInDown');
+        });
+    }
 
     // Mobile Navigation Toggle
     const menuToggle = document.getElementById('menuToggle');
     const mainNavigation = document.getElementById('mainNavigation');
 
+    // 漢堡選單控制
     menuToggle.addEventListener('click', function() {
-        menuToggle.classList.toggle('active');
+        this.classList.toggle('active');
         mainNavigation.classList.toggle('open');
-        
-        // 當菜單打開時，禁止背景滾動以防止干擾
-        if (mainNavigation.classList.contains('open')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.getElementById('overlay').classList.toggle('active');
+        document.body.classList.toggle('menu-open'); // 防止背景滾動
     });
 
-    // Close menu when clicking outside or on a link
-    document.addEventListener('click', function(event) {
-        const isClickInsideMenu = mainNavigation.contains(event.target);
-        const isClickOnToggle = menuToggle.contains(event.target);
-        
-        if (!isClickInsideMenu && !isClickOnToggle && mainNavigation.classList.contains('open')) {
-            menuToggle.classList.remove('active');
-            mainNavigation.classList.remove('open');
-            document.body.style.overflow = ''; // 恢復背景滾動
-        }
+    // 點擊遮罩關閉選單
+    document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('menuToggle').classList.remove('active');
+        document.getElementById('mainNavigation').classList.remove('open');
+        this.classList.remove('active');
+        document.body.classList.remove('menu-open');
     });
 
-    // Close menu when a nav link is clicked
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            menuToggle.classList.remove('active');
-            mainNavigation.classList.remove('open');
-            document.body.style.overflow = ''; // 恢復背景滾動
+    // 菜單項點擊後關閉菜單
+    document.querySelectorAll('.nav-links a').forEach(item => {
+        item.addEventListener('click', function() {
+            // 只有在移動裝置上才執行關閉菜單操作
+            if (window.innerWidth <= 768) {
+                document.getElementById('menuToggle').classList.remove('active');
+                document.getElementById('mainNavigation').classList.remove('open');
+                document.getElementById('overlay').classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
         });
     });
-    
+
+    // 監聽窗口大小變化，在大屏幕下自動關閉菜單
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.getElementById('menuToggle').classList.remove('active');
+            document.getElementById('mainNavigation').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            document.body.classList.remove('menu-open');
+        }
+    });
+
+    // 防止菜單開啟時頁面滾動
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加CSS樣式
+        const style = document.createElement('style');
+        style.textContent = `
+            body.menu-open {
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+
     // 處理菜單內的觸摸滑動
     let touchStartY = 0;
     let touchEndY = 0;
@@ -462,115 +578,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const shareUrl = encodeURIComponent(window.location.href);
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, '_blank');
     });
-
-    // 勵志名言集
-    const motivationalQuotes = [
-        "成功不是偶然，而是日積月累的堅持與努力。",
-        "態度決定高度，堅持鑄就實力。",
-        "不經一番寒徹骨，焉得梅花撲鼻香。",
-        "千里之行，始於足下；萬卷之功，始於當下。",
-        "學習是一場沒有終點的旅程，每一步都會讓你更接近夢想。",
-        "今日的汗水，換來明日的榮耀。",
-        "莫問收穫，但問耕耘；不計一時，但計日積月累。",
-        "每一次認真的復習，都是為未來的成功打下基礎。",
-        "別人的忽視，正是你沉澱自己的最好時機。",
-        "所謂天才，不過是把別人喝咖啡的功夫，都用在了學習上。",
-        "沒有人能替你承受痛苦，也沒有人能替你成就夢想。",
-        "與其羨慕別人的成功，不如更加努力讓自己發光。",
-        "不要讓今天的懶惰成為明天的負擔。",
-        "機會永遠留給有準備的人，而準備的過程往往在別人看不到的地方。",
-        "當你覺得堅持不下去的時候，恰恰是你需要堅持的時候。"
-    ];
-    
-    // 初始化勵志名言顯示
-    let currentQuoteIndex = 0;
-    const quoteText = document.getElementById('quoteText');
-    const prevQuoteBtn = document.getElementById('prevQuote');
-    const nextQuoteBtn = document.getElementById('nextQuote');
-    const quotePagination = document.getElementById('quotePagination');
-    
-    // 生成分頁指示點
-    function generateQuotePagination() {
-        quotePagination.innerHTML = '';
-        motivationalQuotes.forEach((quote, index) => {
-            const dot = document.createElement('span');
-            dot.classList.add('pagination-dot');
-            if (index === currentQuoteIndex) {
-                dot.classList.add('active');
-            }
-            dot.addEventListener('click', () => {
-                displayQuote(index);
-            });
-            quotePagination.appendChild(dot);
-        });
-    }
-    
-    // 顯示指定索引的名言
-    function displayQuote(index) {
-        if (index < 0) {
-            index = motivationalQuotes.length - 1;
-        } else if (index >= motivationalQuotes.length) {
-            index = 0;
-        }
-        
-        // 淡出效果
-        quoteText.classList.add('fade-out');
-        
-        setTimeout(() => {
-            currentQuoteIndex = index;
-            quoteText.textContent = `"${motivationalQuotes[currentQuoteIndex]}"`;
-            
-            // 更新分頁指示點
-            const dots = document.querySelectorAll('.pagination-dot');
-            dots.forEach((dot, i) => {
-                if (i === currentQuoteIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-            
-            // 淡入效果
-            quoteText.classList.remove('fade-out');
-            quoteText.classList.add('fade-in');
-            
-            setTimeout(() => {
-                quoteText.classList.remove('fade-in');
-            }, 500);
-        }, 300);
-    }
-    
-    // 初始化分頁和按鈕事件
-    if (quoteText && prevQuoteBtn && nextQuoteBtn && quotePagination) {
-        // 隨機選擇一個開始的名言
-        currentQuoteIndex = Math.floor(Math.random() * motivationalQuotes.length);
-        quoteText.textContent = `"${motivationalQuotes[currentQuoteIndex]}"`;
-        
-        generateQuotePagination();
-        
-        // 按鈕事件監聽
-        prevQuoteBtn.addEventListener('click', () => {
-            displayQuote(currentQuoteIndex - 1);
-        });
-        
-        nextQuoteBtn.addEventListener('click', () => {
-            displayQuote(currentQuoteIndex + 1);
-        });
-        
-        // 自動輪播名言
-        const quoteInterval = setInterval(() => {
-            if (document.visibilityState === 'visible') {
-                displayQuote(currentQuoteIndex + 1);
-            }
-        }, 10000); // 每10秒自動切換一次
-        
-        // 頁面離開時停止計時器
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                clearInterval(quoteInterval);
-            }
-        });
-    }
 
     // 通知功能
     // 獲取元素

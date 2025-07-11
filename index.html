@@ -6,24 +6,24 @@
     <meta name="theme-color" content="#4361ee">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="114年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
-    <meta name="keywords" content="分科測驗,114年,倒數計時,大學入學,考試日程,備考,高中生,學測,指考">
+    <meta name="description" content="115年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
+    <meta name="keywords" content="分科測驗,115年,倒數計時,大學入學,考試日程,備考,高中生,學測,指考">
     <meta name="author" content="分科測驗倒數計時">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph 標籤 (用於社群媒體分享) -->
-    <meta property="og:title" content="114年分科測驗倒數計時">
-    <meta property="og:description" content="114年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
+    <meta property="og:title" content="115年分科測驗倒數計時">
+    <meta property="og:description" content="115年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://114分科測驗倒數.tw">
-    <meta property="og:image" content="https://114分科測驗倒數.tw/og-image.jpg">
+    <meta property="og:url" content="https://115分科測驗倒數.tw">
+    <meta property="og:image" content="https://115分科測驗倒數.tw/og-image.jpg">
     <meta property="og:locale" content="zh_TW">
     
     <!-- Twitter Card 標籤 -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="114年分科測驗倒數計時">
-    <meta name="twitter:description" content="114年分科測驗倒數計時器，準確掌握備考時間，加油！">
-    <meta name="twitter:image" content="https://114分科測驗倒數.tw/twitter-image.jpg">
+    <meta name="twitter:title" content="115年分科測驗倒數計時">
+    <meta name="twitter:description" content="115年分科測驗倒數計時器，準確掌握備考時間，加油！">
+    <meta property="twitter:image" content="https://115分科測驗倒數.tw/twitter-image.jpg">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -34,19 +34,19 @@
     
     <!-- 網站導覽與 SEO -->
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-    <link rel="alternate" hreflang="zh-TW" href="https://114分科測驗倒數.tw">
+    <link rel="alternate" hreflang="zh-TW" href="https://115分科測驗倒數.tw">
     
     <!-- 結構化資料 (Schema.org) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "114年分科測驗倒數計時",
-        "description": "114年分科測驗倒數計時器，幫助考生掌握備考時間",
-        "url": "https://114分科測驗倒數.tw",
+        "name": "115年分科測驗倒數計時",
+        "description": "115年分科測驗倒數計時器，幫助考生掌握備考時間",
+        "url": "https://115分科測驗倒數.tw",
         "potentialAction": {
             "@type": "ReadAction",
-            "target": "https://114分科測驗倒數.tw"
+            "target": "https://115分科測驗倒數.tw"
         }
     }
     </script>
@@ -54,8 +54,8 @@
     <!-- PWA 支援 -->
     <link rel="manifest" href="/manifest.json">
     
-    <title>114年分科測驗倒數計時 | 2025年大學入學考試</title>
-    <link rel="canonical" href="https://114分科測驗倒數.tw">
+    <title>115年分科測驗倒數計時 | 2026年大學入學考試</title>
+    <link rel="canonical" href="https://115分科測驗倒數.tw">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -69,16 +69,19 @@
         <span></span>
     </div>
 
+    <!-- 添加遮罩層 -->
+    <div class="overlay" id="overlay"></div>
+
     <nav class="top-navigation animate__animated animate__fadeInDown" id="mainNavigation">
         <div class="nav-container">
             <div class="logo">
                 <span>🎓</span>
-                <h2>114年分科測驗</h2>
+                <h2>115年分科測驗</h2>
             </div>
             <ul class="nav-links">
-                <li><a href="https://tyctw.github.io/114clock/">會考倒數</a></li>
-                <li><a href="https://ceecc.vercel.app/">學測倒數</a></li>
-                <li><a href="https://tcte.onrender.com/">統測倒數</a></li>
+                <li><a href="https://tyctw.github.io/114clock/"><i class="fas fa-book"></i> 會考倒數</a></li>
+                <li><a href="https://ceecc.vercel.app/"><i class="fas fa-graduation-cap"></i> 學測倒數</a></li>
+                <li><a href="https://tcte.onrender.com/"><i class="fas fa-award"></i> 統測倒數</a></li>
                 
                 <!-- 添加通知按鈕 -->
                 <li class="feature-menu-item">
@@ -89,7 +92,7 @@
                 </li>
                 
                 <!-- Theme toggle moved to navigation menu -->
-                <li class="theme-toggle-menu-item">
+                <li class="feature-menu-item">
                     <a href="#" id="mobileThemeToggle">
                         <i class="fas fa-moon"></i>
                         切換主題
@@ -115,38 +118,48 @@
 
     <div class="container">
         <header class="animate__animated animate__fadeInDown">
-            <h1>114年分科測驗倒數</h1>
-            <p class="subtitle">2025/7/11(五) – 2025/7/12(六)</p>
+            <h1>115年分科測驗倒數</h1>
+            <p class="subtitle">2026/7/10(五) – 2026/7/11(六)</p>
+            <div class="header-decoration">
+                <span class="decoration-circle"></span>
+                <span class="decoration-line"></span>
+                <span class="decoration-circle"></span>
+            </div>
         </header>
         
         <div class="countdown-container" id="countdown">
             <div class="countdown-item">
-                <span id="days" class="countdown-value">--</span>
+                <span class="countdown-digit" id="days">--</span>
                 <span class="countdown-label">天</span>
+                <div class="countdown-shine"></div>
             </div>
             <div class="countdown-item">
-                <span id="hours" class="countdown-value">--</span>
+                <span class="countdown-digit" id="hours">--</span>
                 <span class="countdown-label">時</span>
+                <div class="countdown-shine"></div>
             </div>
             <div class="countdown-item">
-                <span id="minutes" class="countdown-value">--</span>
+                <span class="countdown-digit" id="minutes">--</span>
                 <span class="countdown-label">分</span>
+                <div class="countdown-shine"></div>
             </div>
             <div class="countdown-item">
-                <span id="seconds" class="countdown-value">--</span>
+                <span class="countdown-digit" id="seconds">--</span>
                 <span class="countdown-label">秒</span>
+                <div class="countdown-shine"></div>
             </div>
         </div>
         
         <div class="message-container">
-            <p id="message">距離114年分科測驗還有...</p>
+            <div class="message-icon"><i class="fas fa-bullhorn"></i></div>
+            <p id="message">距離115年分科測驗還有...</p>
         </div>
         
         <div class="exam-schedule animate__animated animate__fadeIn" id="schedule">
             <h2>考試日程</h2>
             <div class="schedule-container">
                 <div class="day-schedule">
-                    <h3>7月11日 (五)</h3>
+                    <h3>7月10日 (五)</h3>
                     <ul>
                         <li><span class="subject physics">物理</span></li>
                         <li><span class="subject chemistry">化學</span></li>
@@ -155,7 +168,7 @@
                     </ul>
                 </div>
                 <div class="day-schedule">
-                    <h3>7月12日 (六)</h3>
+                    <h3>7月11日 (六)</h3>
                     <ul>
                         <li><span class="subject history">歷史</span></li>
                         <li><span class="subject geography">地理</span></li>
@@ -180,12 +193,12 @@
         
         <footer>
             <p>加油！祝福所有考生金榜題名！</p>
-            <p class="copyright">&copy; <span id="copyrightYear"></span> 114年分科測驗倒數計時</p>
+            <p class="copyright">&copy; <span id="copyrightYear"></span> 115年分科測驗倒數計時</p>
             
             <div class="seo-footer">
-                <p>114年分科測驗倒數計時器是專為高中考生設計的備考工具，提供精確的考試倒數、完整的考試日程表、勵志名言以及學習計時器。幫助您更好地規劃備考時間，掌握考試節奏。</p>
+                <p>115年分科測驗倒數計時器是專為高中考生設計的備考工具，提供精確的考試倒數、完整的考試日程表、勵志名言以及學習計時器。幫助您更好地規劃備考時間，掌握考試節奏。</p>
                 <p>相關資訊：<a href="https://www.ceec.edu.tw/" target="_blank" rel="noopener">大學入學考試中心</a> | <a href="#schedule">分科測驗日程</a> | <a href="#motivation">考生勉勵</a></p>
-                <p>關鍵字：114年分科測驗、大學入學考試、高中升學、考試倒數計時、指考、學測、升大學、備考工具</p>
+                <p>關鍵字：115年分科測驗、大學入學考試、高中升學、考試倒數計時、指考、學測、升大學、備考工具</p>
             </div>
         </footer>
     </div>
@@ -439,8 +452,8 @@
 
         // 設定考試提醒
         function scheduleExamReminders() {
-            // 假設考試日期是2024年7月20日
-            const examDate = new Date('2024-07-20T00:00:00');
+            // 假設考試日期是2026年7月10日
+            const examDate = new Date('2026-07-10T00:00:00');
             const now = new Date();
             
             // 計算時間差（毫秒）
@@ -455,7 +468,7 @@
                         registration.active.postMessage({
                             type: 'schedule-notification',
                             title: '考試倒數一週',
-                            body: '距離第114次專技人員高普考僅剩一週時間，請做好準備',
+                            body: '距離第115次分科測驗僅剩一週時間，請做好準備',
                             icon: '/android-chrome-192x192.png',
                             delay: weekBeforeDelay
                         });
@@ -467,7 +480,7 @@
                         registration.active.postMessage({
                             type: 'schedule-notification',
                             title: '考試倒數三天',
-                            body: '距離第114次專技人員高普考僅剩三天時間，加油！',
+                            body: '距離第115次分科測驗僅剩三天時間，加油！',
                             icon: '/android-chrome-192x192.png',
                             delay: threeDaysBeforeDelay
                         });
@@ -479,7 +492,7 @@
                         registration.active.postMessage({
                             type: 'schedule-notification',
                             title: '考試倒數一天',
-                            body: '明天就是第114次專技人員高普考，請檢查應考證件與文具',
+                            body: '明天就是第115次分科測驗，請檢查應考證件與文具',
                             icon: '/android-chrome-192x192.png',
                             delay: oneDayBeforeDelay
                         });

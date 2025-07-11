@@ -1,7 +1,7 @@
 {
-  "name": "第114次考試倒數計時",
+  "name": "115年分科測驗倒數",
   "short_name": "考試倒數",
-  "description": "為第114次專技人員高普考倒數計時，並提供考前提醒",
+  "description": "為115年分科測驗倒數計時，並提供考前提醒",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

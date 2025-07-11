@@ -1,5 +1,5 @@
 // Service Worker 版本，更新時需要更新此版本號
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = `notification-app-${CACHE_VERSION}`;
 
 // 需要緩存的資源列表
@@ -171,8 +171,8 @@ function getTimeUntilNextNotification() {
 
 // 設置每日通知計時器
 function setupDailyNotifications() {
-  // 獲取目標考試日期 (2025/7/11 - 分科測驗)
-  const targetDate = new Date('2025-07-11T08:00:00+08:00');
+  // 獲取目標考試日期 (2026/7/10 - 分科測驗)
+  const targetDate = new Date('2026-07-10T08:00:00+08:00');
   
   // 計算下一次通知的延遲時間
   const delayUntilNextNotification = getTimeUntilNextNotification();
@@ -196,7 +196,7 @@ function setupDailyNotifications() {
     const dayOfWeek = now.toLocaleDateString('zh-TW', { weekday: 'long' });
     
     // 根據剩餘天數生成不同的通知內容
-    let notificationTitle = `距離分科測驗還有 ${daysRemaining} 天`;
+    let notificationTitle = `距離115年分科測驗還有 ${daysRemaining} 天`;
     let notificationBody = '加油！持續努力，保持良好狀態！';
     
     // 根據剩餘天數定制消息
