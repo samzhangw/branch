@@ -1,514 +1,361 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#4361ee">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="115年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
-    <meta name="keywords" content="分科測驗,115年,倒數計時,大學入學,考試日程,備考,高中生,學測,指考">
-    <meta name="author" content="分科測驗倒數計時">
-    <meta name="robots" content="index, follow">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>115 分科測驗倒數</title>
     
-    <!-- Open Graph 標籤 (用於社群媒體分享) -->
-    <meta property="og:title" content="115年分科測驗倒數計時">
-    <meta property="og:description" content="115年分科測驗倒數計時器，幫助考生掌握備考時間，提供日、時、分、秒倒數，考試日程安排與勵志名言">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://115分科測驗倒數.tw">
-    <meta property="og:image" content="https://115分科測驗倒數.tw/og-image.jpg">
-    <meta property="og:locale" content="zh_TW">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Twitter Card 標籤 -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="115年分科測驗倒數計時">
-    <meta name="twitter:description" content="115年分科測驗倒數計時器，準確掌握備考時間，加油！">
-    <meta property="twitter:image" content="https://115分科測驗倒數.tw/twitter-image.jpg">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4361ee">
-    
-    <!-- 網站導覽與 SEO -->
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-    <link rel="alternate" hreflang="zh-TW" href="https://115分科測驗倒數.tw">
-    
-    <!-- 結構化資料 (Schema.org) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "115年分科測驗倒數計時",
-        "description": "115年分科測驗倒數計時器，幫助考生掌握備考時間",
-        "url": "https://115分科測驗倒數.tw",
-        "potentialAction": {
-            "@type": "ReadAction",
-            "target": "https://115分科測驗倒數.tw"
-        }
-    }
-    </script>
-    
-    <!-- PWA 支援 -->
-    <link rel="manifest" href="/manifest.json">
-    
-    <title>115年分科測驗倒數計時 | 2026年大學入學考試</title>
-    <link rel="canonical" href="https://115分科測驗倒數.tw">
+    <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
-<body>
-    <div class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
+<body class="text-slate-800 antialiased overflow-x-hidden selection:bg-indigo-100 selection:text-indigo-900 font-sans">
+
+    <!-- Dynamic Background -->
+    <div class="aurora-bg"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Navigation -->
+    <div id="navbar-container" class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all duration-300">
+        <nav class="mx-4 w-full max-w-5xl rounded-2xl bg-white/40 backdrop-blur-md border border-white/50 shadow-sm py-4 px-8 flex justify-between items-center transition-all duration-300" id="main-nav">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-3 group cursor-default">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300">
+                    <span class="font-bold text-base tracking-tighter">115</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg text-slate-800 tracking-tight leading-none group-hover:text-indigo-600 transition-colors">分科測驗</span>
+                    <span class="text-[10px] text-slate-500 font-medium uppercase tracking-widest">Countdown</span>
+                </div>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-2">
+                <a href="https://tyctw.github.io/115clock/" target="_blank" class="text-slate-600 hover:text-indigo-600 hover:bg-white/50 px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-1.5 group">
+                    會考倒數 <i data-lucide="external-link" class="w-3 h-3 opacity-40 group-hover:opacity-100"></i>
+                </a>
+                <a href="https://tcte.onrender.com/" target="_blank" class="text-slate-600 hover:text-indigo-600 hover:bg-white/50 px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-1.5 group">
+                    統測倒數 <i data-lucide="external-link" class="w-3 h-3 opacity-40 group-hover:opacity-100"></i>
+                </a>
+                <a href="https://ceecc.vercel.app/" target="_blank" class="text-slate-600 hover:text-indigo-600 hover:bg-white/50 px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-1.5 group">
+                    學測倒數 <i data-lucide="external-link" class="w-3 h-3 opacity-40 group-hover:opacity-100"></i>
+                </a>
+                <div class="w-px h-6 bg-slate-200 mx-2"></div>
+                <button id="open-schedule-btn" class="flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl text-sm font-bold transition-all shadow-md hover:shadow-lg active:scale-95">
+                    <i data-lucide="calendar-days" class="w-4 h-4"></i> 考程表
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-600 hover:text-indigo-600 p-2 rounded-xl hover:bg-white/60 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </nav>
     </div>
 
-    <!-- 添加遮罩層 -->
-    <div class="overlay" id="overlay"></div>
-
-    <nav class="top-navigation animate__animated animate__fadeInDown" id="mainNavigation">
-        <div class="nav-container">
-            <div class="logo">
-                <span>🎓</span>
-                <h2>115年分科測驗</h2>
+    <!-- Mobile Drawer -->
+    <div id="mobile-drawer" class="fixed inset-0 z-[100] hidden">
+        <div id="drawer-backdrop" class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="drawer-panel" class="absolute right-0 top-0 bottom-0 h-[100dvh] w-[280px] max-w-[85vw] bg-white/95 backdrop-blur-xl shadow-2xl flex flex-col border-l border-white/50 translate-x-full transition-transform duration-300">
+            <div class="p-6 flex items-center justify-between border-b border-slate-100/50">
+                <span class="font-bold text-lg text-slate-800">選單導航</span>
+                <button id="close-drawer-btn" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <ul class="nav-links">
-                <li><a href="https://tyctw.github.io/114clock/"><i class="fas fa-book"></i> 會考倒數</a></li>
-                <li><a href="https://ceecc.vercel.app/"><i class="fas fa-graduation-cap"></i> 學測倒數</a></li>
-                <li><a href="https://tcte.onrender.com/"><i class="fas fa-award"></i> 統測倒數</a></li>
-                
-                <!-- 添加通知按鈕 -->
-                <li class="feature-menu-item">
-                    <a href="#" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
-                        開啟提醒
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <button id="drawer-schedule-btn" class="w-full flex items-center justify-center gap-2 px-4 py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 active:scale-95 transition-all">
+                    <i data-lucide="calendar-days" class="w-5 h-5"></i> 查看考程時間表
+                </button>
+                <div class="space-y-3">
+                    <h3 class="px-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">其他考試倒數</h3>
+                    <a href="https://tyctw.github.io/115clock/" target="_blank" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                        會考倒數 <i data-lucide="external-link" class="w-4 h-4 text-slate-300"></i>
                     </a>
-                </li>
-                
-                <!-- Theme toggle moved to navigation menu -->
-                <li class="feature-menu-item">
-                    <a href="#" id="mobileThemeToggle">
-                        <i class="fas fa-moon"></i>
-                        切換主題
+                    <a href="https://tcte.onrender.com/" target="_blank" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                        統測倒數 <i data-lucide="external-link" class="w-4 h-4 text-slate-300"></i>
                     </a>
-                </li>
-                
-                <!-- Existing feature menu items -->
-                <li class="feature-menu-item">
-                    <a href="#" id="mobileStudyTimerBtn">
-                        <i class="fas fa-clock"></i>
-                        學習計時器
+                    <a href="https://ceecc.vercel.app/" target="_blank" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                        學測倒數 <i data-lucide="external-link" class="w-4 h-4 text-slate-300"></i>
                     </a>
-                </li>
-                <li class="feature-menu-item">
-                    <a href="#" id="mobileExamTipsBtn">
-                        <i class="fas fa-lightbulb"></i>
-                        考試小撇步
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        <header class="animate__animated animate__fadeInDown">
-            <h1>115年分科測驗倒數</h1>
-            <p class="subtitle">2026/7/10(五) – 2026/7/11(六)</p>
-            <div class="header-decoration">
-                <span class="decoration-circle"></span>
-                <span class="decoration-line"></span>
-                <span class="decoration-circle"></span>
-            </div>
-        </header>
-        
-        <div class="countdown-container" id="countdown">
-            <div class="countdown-item">
-                <span class="countdown-digit" id="days">--</span>
-                <span class="countdown-label">天</span>
-                <div class="countdown-shine"></div>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-digit" id="hours">--</span>
-                <span class="countdown-label">時</span>
-                <div class="countdown-shine"></div>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-digit" id="minutes">--</span>
-                <span class="countdown-label">分</span>
-                <div class="countdown-shine"></div>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-digit" id="seconds">--</span>
-                <span class="countdown-label">秒</span>
-                <div class="countdown-shine"></div>
-            </div>
-        </div>
-        
-        <div class="message-container">
-            <div class="message-icon"><i class="fas fa-bullhorn"></i></div>
-            <p id="message">距離115年分科測驗還有...</p>
-        </div>
-        
-        <div class="exam-schedule animate__animated animate__fadeIn" id="schedule">
-            <h2>考試日程</h2>
-            <div class="schedule-container">
-                <div class="day-schedule">
-                    <h3>7月10日 (五)</h3>
-                    <ul>
-                        <li><span class="subject physics">物理</span></li>
-                        <li><span class="subject chemistry">化學</span></li>
-                        <li><span class="subject math">數學甲</span></li>
-                        <li><span class="subject biology">生物</span></li>
-                    </ul>
-                </div>
-                <div class="day-schedule">
-                    <h3>7月11日 (六)</h3>
-                    <ul>
-                        <li><span class="subject history">歷史</span></li>
-                        <li><span class="subject geography">地理</span></li>
-                        <li><span class="subject civics">公民與社會</span></li>
-                    </ul>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="pt-40 pb-20 px-4 md:px-6">
         
-        <div class="motivation-quote animate__animated animate__fadeIn" id="motivation">
-            <blockquote id="quoteText">
-                "成功不是偶然，而是日積月累的堅持與努力。"
-            </blockquote>
-            <div class="quote-buttons">
-                <button id="prevQuote" class="quote-btn"><i class="fas fa-chevron-left"></i></button>
-                <button id="nextQuote" class="quote-btn"><i class="fas fa-chevron-right"></i></button>
+        <!-- Hero -->
+        <div class="max-w-5xl mx-auto text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-md border border-white shadow-sm text-indigo-600 text-sm font-bold mb-8 animate-custom-fade">
+                <i data-lucide="graduation-cap" class="w-4 h-4"></i> 115學年度大學分發入學
             </div>
-            <div class="quote-pagination" id="quotePagination">
-                <!-- 分頁指示點將由 JavaScript 動態生成 -->
-            </div>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 animate-custom-fade delay-100 drop-shadow-sm">
+                分科測驗倒數
+            </h1>
+            <p id="hero-subtitle" class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed animate-custom-fade delay-200">
+                夢想就在前方，每一秒都值得把握。距離 115年7月11日 考試日期：
+            </p>
         </div>
-        
-        <footer>
-            <p>加油！祝福所有考生金榜題名！</p>
-            <p class="copyright">&copy; <span id="copyrightYear"></span> 115年分科測驗倒數計時</p>
+
+        <main class="max-w-6xl mx-auto space-y-24">
             
-            <div class="seo-footer">
-                <p>115年分科測驗倒數計時器是專為高中考生設計的備考工具，提供精確的考試倒數、完整的考試日程表、勵志名言以及學習計時器。幫助您更好地規劃備考時間，掌握考試節奏。</p>
-                <p>相關資訊：<a href="https://www.ceec.edu.tw/" target="_blank" rel="noopener">大學入學考試中心</a> | <a href="#schedule">分科測驗日程</a> | <a href="#motivation">考生勉勵</a></p>
-                <p>關鍵字：115年分科測驗、大學入學考試、高中升學、考試倒數計時、指考、學測、升大學、備考工具</p>
+            <!-- Countdown / Celebration Area -->
+            <div id="countdown-section" class="flex flex-col gap-8 animate-custom-fade delay-300">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto w-full">
+                    <!-- Day -->
+                    <div class="flex flex-col items-center justify-center p-4 md:p-6 rounded-3xl backdrop-blur-sm bg-white/40 border border-white/60 shadow-sm hover:bg-white/60 hover:shadow-md hover:scale-105 transition-all duration-300 group">
+                        <div class="relative">
+                            <span id="days" class="text-5xl md:text-7xl font-black tracking-tighter font-sans text-slate-800 group-hover:text-indigo-600 transition-colors">00</span>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-indigo-400/20 rounded-full blur-xl -z-10 group-hover:bg-indigo-500/30 transition-colors"></div>
+                        </div>
+                        <span class="text-xs md:text-sm font-bold uppercase tracking-widest mt-2 text-slate-500 group-hover:text-indigo-400">天 Days</span>
+                    </div>
+                    <!-- Hours -->
+                    <div class="flex flex-col items-center justify-center p-4 md:p-6 rounded-3xl backdrop-blur-sm bg-white/40 border border-white/60 shadow-sm hover:bg-white/60 hover:shadow-md hover:scale-105 transition-all duration-300 group">
+                        <span id="hours" class="text-5xl md:text-7xl font-black tracking-tighter font-sans text-slate-800 group-hover:text-indigo-600 transition-colors">00</span>
+                        <span class="text-xs md:text-sm font-bold uppercase tracking-widest mt-2 text-slate-500 group-hover:text-indigo-400">時 Hours</span>
+                    </div>
+                    <!-- Minutes -->
+                    <div class="flex flex-col items-center justify-center p-4 md:p-6 rounded-3xl backdrop-blur-sm bg-white/40 border border-white/60 shadow-sm hover:bg-white/60 hover:shadow-md hover:scale-105 transition-all duration-300 group">
+                        <span id="minutes" class="text-5xl md:text-7xl font-black tracking-tighter font-sans text-slate-800 group-hover:text-indigo-600 transition-colors">00</span>
+                        <span class="text-xs md:text-sm font-bold uppercase tracking-widest mt-2 text-slate-500 group-hover:text-indigo-400">分 Minutes</span>
+                    </div>
+                    <!-- Seconds -->
+                    <div class="flex flex-col items-center justify-center p-4 md:p-6 rounded-3xl backdrop-blur-sm bg-white/40 border border-white/60 shadow-sm hover:bg-white/60 hover:shadow-md hover:scale-105 transition-all duration-300 group">
+                        <span id="seconds" class="text-5xl md:text-7xl font-black tracking-tighter font-sans text-slate-800 group-hover:text-indigo-600 transition-colors">00</span>
+                        <span class="text-xs md:text-sm font-bold uppercase tracking-widest mt-2 text-slate-500 group-hover:text-indigo-400">秒 Seconds</span>
+                    </div>
+                </div>
+
+                <!-- Schedule Trigger Button (Below Countdown) -->
+                <div class="flex justify-center animate-custom-fade delay-500">
+                    <button id="hero-schedule-btn" class="group relative inline-flex items-center gap-2 px-8 py-3 bg-white/50 hover:bg-white/80 backdrop-blur-md rounded-full text-indigo-900 font-bold shadow-sm hover:shadow-indigo-200/50 hover:scale-105 transition-all duration-300 border border-white/60">
+                         <i data-lucide="calendar-days" class="w-5 h-5 text-indigo-600 group-hover:rotate-12 transition-transform"></i>
+                         <span>查看考程表</span>
+                         <i data-lucide="chevron-right" class="w-4 h-4 opacity-50 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                 </div>
+            </div>
+
+            <!-- Celebration UI (Hidden by default) -->
+            <div id="celebration-section" class="hidden bg-white/70 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-indigo-100 border border-white p-10 md:p-16 text-center animate-custom-zoom max-w-4xl mx-auto">
+                <div class="inline-flex items-center justify-center p-6 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full text-amber-600 mb-8 shadow-inner">
+                    <i data-lucide="party-popper" class="w-16 h-16"></i>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-6 tracking-tight">考試結束！辛苦了！</h2>
+                <div class="space-y-4 max-w-2xl mx-auto mb-10">
+                    <p class="text-2xl text-indigo-600 font-bold">致 115 分科測驗戰士</p>
+                    <p class="text-slate-600 leading-relaxed text-lg">在這段漫長的旅程中，你已經戰勝了無數的挑戰。無論結果如何，你的堅持與努力本身就是最珍貴的寶藏。好好休息，擁抱未來無限的可能！</p>
+                </div>
+                <button id="celebrate-btn" class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2 mx-auto">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i> 再次慶祝
+                </button>
+            </div>
+
+            <!-- Quote & Next Event -->
+            <div id="info-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-custom-fade delay-500">
+                <!-- Quote -->
+                <div class="lg:col-span-8 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-8 md:p-10 text-white shadow-xl shadow-indigo-200 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full translate-y-1/3 -translate-x-1/4 blur-2xl"></div>
+                    <div class="relative z-10 flex flex-col h-full justify-between gap-6">
+                        <div>
+                            <div class="flex items-center gap-2 opacity-80 mb-4">
+                                <i data-lucide="quote" class="w-5 h-5 fill-current"></i>
+                                <span class="text-xs font-bold tracking-widest uppercase">Daily Motivation</span>
+                            </div>
+                            <p id="quote-text" class="text-2xl md:text-4xl font-bold leading-tight tracking-tight">載入中...</p>
+                        </div>
+                        <div class="flex items-center gap-4 pt-4 border-t border-white/20">
+                            <button id="new-quote-btn" class="flex items-center gap-2 px-5 py-2.5 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-md transition-all text-sm font-bold active:scale-95">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i> 換一句
+                            </button>
+                            <div class="text-xs opacity-60 font-mono" id="today-date"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Event (Dynamic) -->
+                <div id="next-event-card" class="hidden lg:col-span-4 bg-white/60 backdrop-blur-md rounded-3xl p-8 border border-white/60 shadow-lg flex flex-col justify-between hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-600 mb-2">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                            <span class="text-xs font-bold tracking-widest uppercase">Next Up</span>
+                        </div>
+                        <h3 id="next-event-title" class="text-xl font-bold text-slate-800 mb-1"></h3>
+                        <p id="next-event-desc" class="text-sm text-slate-500 line-clamp-2"></p>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-indigo-50">
+                        <div class="flex items-baseline gap-2">
+                            <span id="next-event-days" class="text-4xl font-black text-slate-800 tabular-nums"></span>
+                            <span class="text-sm font-bold text-slate-400 uppercase">Days Left</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reminders -->
+            <div class="w-full animate-custom-fade delay-700">
+                <div class="flex items-center gap-3 mb-8 justify-center md:justify-start">
+                    <div class="p-2.5 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white">
+                        <i data-lucide="triangle-alert" class="w-6 h-6 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800">應考貼心提醒</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="group relative bg-white/60 backdrop-blur-md rounded-3xl p-6 border border-white/60 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="id-card" class="w-6 h-6 text-indigo-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">必帶證件</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium opacity-90">身分證、健保卡、駕照等「正本」。(學生證無效)</p>
+                    </div>
+                    <div class="group relative bg-white/60 backdrop-blur-md rounded-3xl p-6 border border-white/60 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="pen-tool" class="w-6 h-6 text-pink-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">文具準備</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium opacity-90">黑色原子筆、2B鉛筆、橡皮擦、修正帶、圓規、直尺。</p>
+                    </div>
+                    <div class="group relative bg-white/60 backdrop-blur-md rounded-3xl p-6 border border-white/60 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="watch" class="w-6 h-6 text-amber-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">手錶規定</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium opacity-90">僅限指針式手錶，嚴禁電子錶、智慧手錶，不得發出聲響。</p>
+                    </div>
+                    <div class="group relative bg-white/60 backdrop-blur-md rounded-3xl p-6 border border-white/60 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="smartphone" class="w-6 h-6 text-rose-500"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">電子產品</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed font-medium opacity-90">手機務必「完全關機」(含鬧鐘)，放置於臨時置物區。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="w-full max-w-4xl mx-auto animate-custom-fade delay-1000">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="p-3 bg-white rounded-xl shadow-sm border border-indigo-100">
+                        <i data-lucide="calendar" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">重要日程表</h2>
+                </div>
+                <div class="relative pl-8 md:pl-0">
+                    <!-- Timeline Vertical Line -->
+                    <div class="absolute left-8 md:left-1/2 top-4 bottom-4 w-px bg-slate-200 -translate-x-1/2 hidden md:block"></div>
+                    <div class="absolute left-0 top-4 bottom-4 w-px bg-slate-200 md:hidden"></div>
+                    
+                    <!-- Dynamic Events Inserted Here -->
+                    <div id="timeline-container" class="space-y-8"></div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-32 border-t border-white/50 bg-white/30 backdrop-blur-md">
+            <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-2">
+                        <div class="w-6 h-6 bg-slate-800 rounded-lg flex items-center justify-center text-white text-xs font-bold">115</div>
+                        <span class="font-bold text-slate-700">分科測驗倒數</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        Made with <i data-lucide="heart" class="w-3 h-3 inline-block text-rose-400 mx-0.5"></i> for students. 
+                        <br class="md:hidden" /> All rights reserved.
+                    </p>
+                </div>
+                <a href="mailto:tyctw.analyze@gmail.com" class="flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-indigo-100 shadow-sm hover:shadow-md hover:border-indigo-200 hover:scale-105 transition-all group">
+                    <div class="p-1.5 bg-indigo-50 rounded-full text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-600 group-hover:text-slate-800">tyctw.analyze@gmail.com</span>
+                </a>
             </div>
         </footer>
     </div>
-    
-    <div id="studyTimerModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>學習計時器</h2>
-            <div id="studyTimerDisplay">00:00:00</div>
-            <div class="timer-controls">
-                <button id="startStudyTimer">開始</button>
-                <button id="pauseStudyTimer">暫停</button>
-                <button id="resetStudyTimer">重置</button>
-            </div>
-            <div class="study-log">
-                <h3>今日學習紀錄</h3>
-                <ul id="studyLogList"></ul>
-            </div>
-        </div>
-    </div>
 
-    <div id="examTipsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>考試小撇步</h2>
-            <div class="exam-tips-container">
-                <div class="tip">
-                    <i class="fas fa-clock"></i>
-                    <h3>時間管理</h3>
-                    <p>合理分配每個題目的作答時間，不要在單一題目上花太多時間。</p>
+    <!-- Exam Schedule Modal -->
+    <div id="schedule-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 sm:p-6">
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="modal-content" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0 transition-all duration-300">
+            <div class="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50/50">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">115學年度分科測驗日程表</h3>
+                    <p class="text-sm text-slate-500 mt-1">考試日期：115年7月11日(五) ~ 7月12日(六)</p>
                 </div>
-                <div class="tip">
-                    <i class="fas fa-brain"></i>
-                    <h3>心理調適</h3>
-                    <p>保持冷靜，深呼吸，相信自己的準備已經足夠。</p>
-                </div>
-                <div class="tip">
-                    <i class="fas fa-book-open"></i>
-                    <h3>答題技巧</h3>
-                    <p>由易到難，先做有把握的題目，再挑戰較難的題目。</p>
+                <button id="close-modal-btn" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-0">
+                <div class="overflow-x-auto">
+                    <div class="min-w-[600px]">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-indigo-50/50 text-indigo-900 border-b border-indigo-100">
+                                    <th class="py-4 px-6 font-bold w-40 text-center border-r border-indigo-100">時間</th>
+                                    <th class="py-4 px-6 font-bold text-center border-r border-indigo-100 w-48">7月11日<br/><span class="text-xs font-normal opacity-80">(星期六)</span></th>
+                                    <th class="py-4 px-6 font-bold text-center border-r border-indigo-100 w-48">7月12日<br/><span class="text-xs font-normal opacity-80">(星期日)</span></th>
+                                    <th class="py-4 px-6 font-bold text-center w-48">備註</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700 text-sm">
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="py-2 px-6 text-center font-mono text-slate-500 border-r border-slate-200">08:35</td><td colSpan="3" class="py-2 px-6 text-slate-500 text-center italic">預備鈴響（持應試有效證件正本入場）</td></tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50"><td class="py-4 px-6 text-center font-bold border-r border-slate-200">08:40 <br/> ~ <br/> 10:00</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">物理</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">歷史</td><td class="py-4 px-6 text-xs text-slate-500 space-y-1">09:00 截止入場<br/>09:40 始可離場</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="py-2 px-6 text-center font-mono text-slate-500 border-r border-slate-200">10:45</td><td colSpan="3" class="py-2 px-6 text-slate-500 text-center italic">預備鈴響（持應試有效證件正本入場）</td></tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50"><td class="py-4 px-6 text-center font-bold border-r border-slate-200">10:50 <br/> ~ <br/> 12:10</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">化學</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">地理</td><td class="py-4 px-6 text-xs text-slate-500 space-y-1">11:10 截止入場<br/>11:50 始可離場</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="py-2 px-6 text-center font-mono text-slate-500 border-r border-slate-200">13:55</td><td colSpan="3" class="py-2 px-6 text-slate-500 text-center italic">預備鈴響（持應試有效證件正本入場）</td></tr>
+                                <tr class="border-b border-slate-200 hover:bg-slate-50"><td class="py-4 px-6 text-center font-bold border-r border-slate-200">14:00 <br/> ~ <br/> 15:20</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">數學甲</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">數學乙</td><td class="py-4 px-6 text-xs text-slate-500 space-y-1">14:20 截止入場<br/>15:00 始可離場</td></tr>
+                                <tr class="bg-slate-50 border-b border-slate-200"><td class="py-2 px-6 text-center font-mono text-slate-500 border-r border-slate-200">16:05</td><td colSpan="3" class="py-2 px-6 text-slate-500 text-center italic">預備鈴響（持應試有效證件正本入場）</td></tr>
+                                <tr class="hover:bg-slate-50"><td class="py-4 px-6 text-center font-bold border-r border-slate-200">16:10 <br/> ~ <br/> 17:30</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">生物</td><td class="py-4 px-6 text-center text-lg font-bold text-indigo-600 border-r border-slate-200">公民與社會</td><td class="py-4 px-6 text-xs text-slate-500 space-y-1">16:30 截止入場<br/>17:10 始可離場</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="notificationModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>考試提醒設置</h2>
-            <div class="notification-container">
-                <div class="notification-header">
-                    <p class="notification-status" id="notificationStatus">通知權限: 未請求</p>
-                    <div class="notification-icon">
-                        <i class="fas fa-bell notification-bell-icon"></i>
-                    </div>
-                </div>
-                
-                <div class="notification-settings">
-                    <h3>選擇提醒項目</h3>
-                    
-                    <!-- 每日通知選項 -->
-                    <div class="notification-option daily-notification-option">
-                        <input type="checkbox" id="notifyDaily" class="checkbox-hidden">
-                        <label for="notifyDaily" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">每日提醒</span>
-                                <span class="notification-desc">每天早上8點發送倒數提醒和勵志訊息</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="daily-notification-status" id="dailyNotificationStatus" style="display: none;">
-                        <i class="fas fa-info-circle"></i> <span id="dailyNotificationStatusText">每日通知狀態載入中...</span>
-                    </div>
-                    
-                    <div class="notification-option">
-                        <input type="checkbox" id="notifyOneMonth" value="30" class="checkbox-hidden">
-                        <label for="notifyOneMonth" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">距離考試一個月</span>
-                                <span class="notification-desc">提前規劃最後衝刺階段</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="notification-option">
-                        <input type="checkbox" id="notifyOneWeek" value="7" class="checkbox-hidden">
-                        <label for="notifyOneWeek" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">距離考試一週</span>
-                                <span class="notification-desc">調整作息，保持良好狀態</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="notification-option">
-                        <input type="checkbox" id="notifyThreeDays" value="3" class="checkbox-hidden">
-                        <label for="notifyThreeDays" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">距離考試三天</span>
-                                <span class="notification-desc">檢查考試用品，調整心態</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="notification-option">
-                        <input type="checkbox" id="notifyOneDay" value="1" class="checkbox-hidden">
-                        <label for="notifyOneDay" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">距離考試一天</span>
-                                <span class="notification-desc">最後準備，早點休息</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="notification-option">
-                        <input type="checkbox" id="notifyExamDay" value="0" class="checkbox-hidden">
-                        <label for="notifyExamDay" class="checkbox-label">
-                            <span class="checkbox-custom"></span>
-                            <div class="option-text">
-                                <span class="notification-title">考試當天提醒</span>
-                                <span class="notification-desc">考試日加油打氣</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="notification-actions">
-                    <button id="requestPermissionBtn" class="primary-btn">
-                        <i class="fas fa-check-circle"></i> 請求通知權限
-                    </button>
-                    <button id="saveNotificationSettings" class="primary-btn" disabled>
-                        <i class="fas fa-save"></i> 儲存設置
-                    </button>
-                    <button id="testNotificationBtn" class="secondary-btn" disabled>
-                        <i class="fas fa-bell"></i> 測試通知
-                    </button>
-                    <!-- 每日通知測試按鈕 -->
-                    <button id="testDailyNotificationBtn" class="secondary-btn" disabled>
-                        <i class="fas fa-calendar-day"></i> 測試每日通知
-                    </button>
-                </div>
-                
-                <div class="notification-info">
-                    <p><i class="fas fa-info-circle"></i> 網頁通知僅在瀏覽器開啟時有效。若要在背景接收通知，請考慮安裝相關應用程式或設置日曆提醒。</p>
+            <div class="bg-slate-50 p-4 border-t border-slate-200 flex items-start gap-3">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs text-slate-600 space-y-1">
+                    <p>1. 考試時間為80分鐘。</p>
+                    <p>2. 考試開始20分鐘後不得入場。</p>
+                    <p>3. 考試開始60分鐘內不得離場。</p>
+                    <p className="text-slate-400">資料來源：參考歷年簡章時程，請以115學年度正式簡章為準。</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="social-share">
-        <a href="#" id="shareLineBtn" class="share-btn line"><i class="fab fa-line"></i></a>
-        <a href="#" id="shareFacebookBtn" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
-    </div>
-
-    <!-- Service Worker 更新提示 -->
-    <div id="updateToast" class="update-toast" style="display: none;">
-        <div class="update-toast-content">
-            <i class="fas fa-sync-alt update-icon"></i>
-            <div class="update-message">
-                <strong>有新版本可用</strong>
-                <p>請重新整理頁面以獲取最新功能</p>
-            </div>
-            <button id="updateButton" class="update-button">更新</button>
-            <button id="dismissButton" class="dismiss-button"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
-
+    <!-- Script -->
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-    <script>
-        // 註冊 Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker 註冊成功: ', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('ServiceWorker 註冊失敗: ', error);
-                    });
-            });
-        }
-
-        // 通知功能
-        const enableNotificationsButton = document.getElementById('enable-notifications');
-        const notificationStatus = document.getElementById('notification-status');
-
-        // 檢查是否支援通知功能
-        if (!('Notification' in window)) {
-            notificationStatus.textContent = '您的瀏覽器不支援通知功能';
-            enableNotificationsButton.disabled = true;
-        } else {
-            // 檢查當前通知許可狀態
-            checkNotificationPermission();
-        }
-
-        // 通知許可檢查
-        function checkNotificationPermission() {
-            if (Notification.permission === 'granted') {
-                notificationStatus.textContent = '通知已啟用';
-                enableNotificationsButton.textContent = '通知已啟用';
-                enableNotificationsButton.disabled = true;
-                scheduleExamReminders();
-            } else if (Notification.permission === 'denied') {
-                notificationStatus.textContent = '通知權限已被拒絕，請在瀏覽器設定中重新授權';
-                enableNotificationsButton.disabled = true;
-            } else {
-                enableNotificationsButton.addEventListener('click', requestNotificationPermission);
-            }
-        }
-
-        // 請求通知許可
-        function requestNotificationPermission() {
-            Notification.requestPermission()
-                .then(permission => {
-                    if (permission === 'granted') {
-                        notificationStatus.textContent = '通知已啟用';
-                        enableNotificationsButton.textContent = '通知已啟用';
-                        enableNotificationsButton.disabled = true;
-                        scheduleExamReminders();
-                        
-                        // 發送測試通知
-                        sendTestNotification();
-                    } else {
-                        notificationStatus.textContent = '您已拒絕通知權限';
-                    }
-                });
-        }
-
-        // 發送測試通知
-        function sendTestNotification() {
-            if ('serviceWorker' in navigator && 'PushManager' in window) {
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.active.postMessage({
-                        type: 'schedule-notification',
-                        title: '通知已啟用',
-                        body: '您將在考試前收到提醒',
-                        icon: '/android-chrome-192x192.png',
-                        delay: 0 // 立即發送
-                    });
-                });
-            } else {
-                // 若Service Worker尚未就緒，直接使用Notification API
-                new Notification('通知已啟用', {
-                    body: '您將在考試前收到提醒',
-                    icon: '/android-chrome-192x192.png'
-                });
-            }
-        }
-
-        // 設定考試提醒
-        function scheduleExamReminders() {
-            // 假設考試日期是2026年7月10日
-            const examDate = new Date('2026-07-10T00:00:00');
-            const now = new Date();
-            
-            // 計算時間差（毫秒）
-            const timeToExam = examDate.getTime() - now.getTime();
-            
-            // 若Service Worker已就緒，安排提醒
-            if ('serviceWorker' in navigator && 'PushManager' in window) {
-                navigator.serviceWorker.ready.then(registration => {
-                    // 一週前提醒
-                    if (timeToExam > 7 * 24 * 60 * 60 * 1000) {
-                        const weekBeforeDelay = timeToExam - (7 * 24 * 60 * 60 * 1000);
-                        registration.active.postMessage({
-                            type: 'schedule-notification',
-                            title: '考試倒數一週',
-                            body: '距離第115次分科測驗僅剩一週時間，請做好準備',
-                            icon: '/android-chrome-192x192.png',
-                            delay: weekBeforeDelay
-                        });
-                    }
-                    
-                    // 三日前提醒
-                    if (timeToExam > 3 * 24 * 60 * 60 * 1000) {
-                        const threeDaysBeforeDelay = timeToExam - (3 * 24 * 60 * 60 * 1000);
-                        registration.active.postMessage({
-                            type: 'schedule-notification',
-                            title: '考試倒數三天',
-                            body: '距離第115次分科測驗僅剩三天時間，加油！',
-                            icon: '/android-chrome-192x192.png',
-                            delay: threeDaysBeforeDelay
-                        });
-                    }
-                    
-                    // 一日前提醒
-                    if (timeToExam > 24 * 60 * 60 * 1000) {
-                        const oneDayBeforeDelay = timeToExam - (24 * 60 * 60 * 1000);
-                        registration.active.postMessage({
-                            type: 'schedule-notification',
-                            title: '考試倒數一天',
-                            body: '明天就是第115次分科測驗，請檢查應考證件與文具',
-                            icon: '/android-chrome-192x192.png',
-                            delay: oneDayBeforeDelay
-                        });
-                    }
-                });
-            }
-        }
-    </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-H9X7EC127P"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-H9X7EC127P');
-</script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
