@@ -24,6 +24,8 @@ const QUOTES = [
     "耐得住寂寞，才守得住繁華。", "相信積累的力量。", "未來的路還很長，請保持熱愛。"
 ];
 
+const NOTIFICATION_MILESTONES = [365, 300, 200, 100, 60, 30, 7, 1];
+
 // App State
 const mainExam = SCHEDULE_DATA.find(e => e.isMainExam) || SCHEDULE_DATA[0];
 const examEndDate = createDate(7, 12, 17, 30);
@@ -77,10 +79,13 @@ function updateCountdown() {
         const diff = target - now;
         
         if (diff > 0) {
-            daysEl.textContent = formatTwoDigits(Math.floor(diff / (1000 * 60 * 60 * 24)));
+            const daysLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
+            daysEl.textContent = formatTwoDigits(daysLeft);
             hoursEl.textContent = formatTwoDigits(Math.floor((diff / (1000 * 60 * 60)) % 24));
             minutesEl.textContent = formatTwoDigits(Math.floor((diff / 1000 / 60) % 60));
             secondsEl.textContent = formatTwoDigits(Math.floor((diff / 1000) % 60));
+
+            checkMilestones(daysLeft);
         } else {
             // Exam in progress or just started
             daysEl.textContent = "00";
@@ -89,6 +94,65 @@ function updateCountdown() {
             secondsEl.textContent = "00";
         }
     }
+}
+
+// Notification Logic
+function checkMilestones(daysLeft) {
+    if (!("Notification" in window) || Notification.permission !== 'granted') return;
+
+    if (NOTIFICATION_MILESTONES.includes(daysLeft)) {
+        const key = `exam_notif_${daysLeft}`;
+        const lastSent = localStorage.getItem(key);
+        const today = new Date().toDateString();
+
+        if (lastSent !== today) {
+            try {
+                new Notification('分科測驗倒數提醒', {
+                    body: `距離考試只剩下 ${daysLeft} 天！堅持就是勝利！`,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2995/2995467.png' // Generic alarm icon if needed
+                });
+                localStorage.setItem(key, today);
+            } catch (e) {
+                console.log('Notification failed', e);
+            }
+        }
+    }
+}
+
+function setupNotifications() {
+    const btn = document.getElementById('notification-btn');
+    if (!btn) return;
+
+    if (!("Notification" in window)) {
+        btn.style.display = 'none';
+        return;
+    }
+
+    function updateBtnState() {
+        if (Notification.permission === 'granted') {
+            btn.innerHTML = '<i data-lucide="bell-ring" class="w-4 h-4"></i> 已開啟提醒';
+            btn.classList.add('bg-green-100', 'text-green-700', 'border-green-200');
+            btn.classList.remove('bg-white/50', 'text-slate-600', 'hover:bg-white/80');
+            btn.disabled = true;
+        } else if (Notification.permission === 'denied') {
+             btn.innerHTML = '<i data-lucide="bell-off" class="w-4 h-4"></i> 提醒已封鎖';
+             btn.disabled = true;
+        }
+        if(window.lucide) window.lucide.createIcons();
+    }
+
+    btn.addEventListener('click', () => {
+        Notification.requestPermission().then(permission => {
+            updateBtnState();
+            if (permission === 'granted') {
+                new Notification('115分科測驗倒數', {
+                    body: '倒數提醒已開啟！我們將在重要時刻提醒您。'
+                });
+            }
+        });
+    });
+
+    updateBtnState();
 }
 
 // Render Timeline
@@ -286,6 +350,7 @@ function triggerCelebration() {
 document.addEventListener('DOMContentLoaded', () => {
     if(window.lucide) window.lucide.createIcons();
     
+    setupNotifications(); // Initialize notifications
     updateCountdown();
     renderTimeline();
     updateQuote();

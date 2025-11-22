@@ -46,6 +46,18 @@
     100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-15deg); }
+    40% { transform: rotate(15deg); }
+    60% { transform: rotate(-10deg); }
+    80% { transform: rotate(10deg); }
+}
+
+.animate-bell-shake {
+    animation: bellShake 1s ease infinite;
+}
+
 .animate-custom-fade {
     animation: customFadeIn 0.8s ease-out forwards;
     opacity: 0; /* Starts hidden */
